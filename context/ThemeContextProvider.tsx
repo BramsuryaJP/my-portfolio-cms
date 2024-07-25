@@ -20,6 +20,10 @@ export default function ThemeContextProvider({
 }: ThemeContextProviderProps) {
 	const [theme, setTheme] = useState<Theme>('light')
 
+	useEffect(() => {
+		document.documentElement.dataset.theme = theme
+	}, [theme])
+
 	const toggleTheme = () => {
 		if (theme === 'light') {
 			setTheme('dark')
