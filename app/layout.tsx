@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
 import './globals.css'
 import ThemeContextProvider from '@/context/ThemeContextProvider'
 import { Sidebar } from '@/components/navigation/Sidebar'
 
-const inter = Inter({ subsets: ['latin'] })
+const montserrat = Montserrat({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
 	title: `Bramsurya's Portfolio Website`,
@@ -19,7 +19,7 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body
-				className={`${inter.className} bg-primaryLightBg dark:bg-primaryDarkBg h-dvh`}
+				className={`${montserrat.className} bg-primaryLightBg dark:bg-primaryDarkBg h-dvh`}
 			>
 				<ThemeContextProvider>
 					<Sidebar>{children}</Sidebar>
