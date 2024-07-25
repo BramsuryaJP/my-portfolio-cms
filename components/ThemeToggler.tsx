@@ -9,7 +9,7 @@ export default function ThemeToggler() {
 
 	return (
 		<button className='text-[#222831] dark:text-white' onClick={toggleTheme}>
-			{theme === 'light' ? <BsMoon size={20} /> : <BsSun size={20} />}
+			{theme === 'light' ? <BsMoon size={16} /> : <BsSun size={16} />}
 		</button>
 	)
 }

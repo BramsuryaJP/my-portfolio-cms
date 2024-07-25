@@ -14,7 +14,7 @@ export const Sidebar = ({ children }: SidebarProps) => {
 			<input id='my-drawer-3' type='checkbox' className='drawer-toggle' />
 			<div className='drawer-content flex flex-col'>
 				{/* Navbar */}
-				<div className='navbar bg-base-200 dark:bg-[#31363F] w-full fixed top-0 right-0'>
+				<div className='navbar bg-primaryLightBg border-b dark:bg-primaryDark border-primaryLightBorder dark:border-primaryDarkBorder w-full fixed top-0 right-0 p-4'>
 					<div className='flex-none lg:hidden'>
 						<label
 							htmlFor='my-drawer-3'
@@ -45,7 +45,7 @@ export const Sidebar = ({ children }: SidebarProps) => {
 					</div>
 				</div>
 				{/* Page content here */}
-				<div className='h-dvh py-20 px-6'>{children}</div>
+				<div className='h-dvh py-24 px-7'>{children}</div>
 			</div>
 			<div className='drawer-side'>
 				<label
@@ -53,10 +53,10 @@ export const Sidebar = ({ children }: SidebarProps) => {
 					aria-label='close sidebar'
 					className='drawer-overlay'
 				></label>
-				<ul className='menu dark:bg-[#31363F] bg-base-200 min-h-full w-80 p-0'>
+				<ul className='menu dark:bg-[#31363F] bg-primaryLight border-b min-h-full w-80 p-0'>
 					{/* Sidebar content here */}
 
-					<div className='p-4 flex items-center justify-center'>
+					<div className='p-4 bg-primaryLightBg dark:bg-primaryDark border-b border-primaryLightBorder dark:border-primaryDarkBorder flex items-center justify-center'>
 						<p className='text-2xl text-[#222831] dark:text-white font-bold'>
 							Portfolio CMS
 						</p>
@@ -66,7 +66,7 @@ export const Sidebar = ({ children }: SidebarProps) => {
 						{links.map((link, index) => (
 							<Link href={link.url} key={index} className='flex'>
 								<li className='py-1 flex-1'>
-									<p className='text-base text-[#222831] dark:text-white hover:bg-transparent'>
+									<p className='text-base text-[#222831] dark:text-white hover:bg-transparent focus:!bg-transparent active:!bg-transparent focus:!text-primaryDark active:!text-primaryDark dark:focus:!text-white dark:active:!text-white'>
 										{link.name}
 									</p>
 								</li>

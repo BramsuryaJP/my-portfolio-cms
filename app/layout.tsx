@@ -19,7 +19,7 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body
-				className={`${inter.className} bg-[#EEEEEE] dark:bg-[#222831]`}
+				className={`${inter.className} bg-primaryLightBg dark:bg-primaryDarkBg`}
 			>
 				<ThemeContextProvider>
 					<Sidebar>{children}</Sidebar>

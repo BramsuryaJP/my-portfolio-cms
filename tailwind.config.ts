@@ -15,6 +15,13 @@ const config: Config = {
 			},
 			colors: {
 				white: '#EEEEEE',
+				primaryLight: '#F8FAFC',
+				primaryLightBg: '#FFFFFF',
+				primaryLightBorder: '#E5E7EB',
+				primaryDark: '#31363F',
+				primaryDarkBg: '#222831',
+				primaryDarkBorder: 'rgba(255,255,255,0.2)',
+				secondary: '#76ABAE',
 			},
 		},
 	},
