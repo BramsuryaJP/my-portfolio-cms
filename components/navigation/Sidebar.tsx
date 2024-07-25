@@ -5,6 +5,8 @@ import { SidebarProps } from './types'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import ThemeToggler from '../ThemeToggler'
+import { FaBars } from 'react-icons/fa6'
+import { FaTimes } from 'react-icons/fa'
 
 export const Sidebar = ({ children }: SidebarProps) => {
 	const pathname = usePathname()
@@ -19,24 +21,18 @@ export const Sidebar = ({ children }: SidebarProps) => {
 						<label
 							htmlFor='my-drawer-3'
 							aria-label='open sidebar'
-							className='btn btn-square btn-ghost'
+							className='btn btn-square btn-ghost text-primaryDarkBg dark:text-white'
 						>
-							<svg
-								xmlns='http://www.w3.org/2000/svg'
-								fill='none'
-								viewBox='0 0 24 24'
-								className='inline-block h-6 w-6 stroke-current'
-							>
-								<path
-									strokeLinecap='round'
-									strokeLinejoin='round'
-									strokeWidth='2'
-									d='M4 6h16M4 12h16M4 18h16'
-								></path>
-							</svg>
+							<FaBars size={20} />
 						</label>
 					</div>
-					<div className='mx-2 flex-1 px-2 block'>Portfolio CMS</div>
+					<div className='mx-2 flex-1 px-2 block text-2xl text-primaryDarkBg dark:text-white font-bold'>
+						Portfolio CMS
+					</div>
+          <div className='flex lg:hidden'>
+							<ThemeToggler />
+
+          </div>
 					<div className='hidden flex-none lg:block'>
 						<ul className='menu menu-horizontal'>
 							{/* Navbar menu content here */}
@@ -45,7 +41,7 @@ export const Sidebar = ({ children }: SidebarProps) => {
 					</div>
 				</div>
 				{/* Page content here */}
-				<div className='h-dvh py-24 px-7'>{children}</div>
+				<div className='h-dvh py-28 lg:py-24 px-7'>{children}</div>
 			</div>
 			<div className='drawer-side'>
 				<label
@@ -56,17 +52,24 @@ export const Sidebar = ({ children }: SidebarProps) => {
 				<ul className='menu dark:bg-[#31363F] bg-primaryLight border-b min-h-full w-80 p-0'>
 					{/* Sidebar content here */}
 
-					<div className='p-4 bg-primaryLightBg dark:bg-primaryDark border-b border-primaryLightBorder dark:border-primaryDarkBorder flex items-center justify-center'>
-						<p className='text-2xl text-[#222831] dark:text-white font-bold'>
+					<div className='p-4 bg-primaryLightBg dark:bg-primaryDark border-b border-primaryLightBorder dark:border-primaryDarkBorder flex items-center justify-between'>
+						<p className='ps-4 text-2xl text-primaryDarkBg dark:text-white font-bold'>
 							Portfolio CMS
 						</p>
+						<label
+							htmlFor='my-drawer-3'
+							aria-label='close sidebar'
+							className='btn btn-square btn-ghost text-primaryDarkBg dark:text-white flex lg:hidden'
+						>
+							<FaTimes size={20} />
+						</label>
 					</div>
 
 					<div className='flex flex-col gap-2 py-4 ps-4'>
 						{links.map((link, index) => (
 							<Link href={link.url} key={index} className='flex'>
 								<li className='py-1 flex-1'>
-									<p className='text-base text-[#222831] dark:text-white hover:bg-transparent focus:!bg-transparent active:!bg-transparent focus:!text-primaryDark active:!text-primaryDark dark:focus:!text-white dark:active:!text-white'>
+									<p className='text-base text-primaryDark dark:text-white hover:bg-transparent focus:!bg-transparent active:!bg-transparent focus:!text-primaryDark active:!text-primaryDark dark:focus:!text-white dark:active:!text-white'>
 										{link.name}
 									</p>
 								</li>
