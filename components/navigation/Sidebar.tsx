@@ -14,7 +14,7 @@ export const Sidebar = ({ children }: SidebarProps) => {
 	return (
 		<div className='drawer lg:drawer-open'>
 			<input id='my-drawer-3' type='checkbox' className='drawer-toggle' />
-			<div className='drawer-content flex flex-col'>
+			<div className='drawer-content flex flex-col overflow-y-auto'>
 				{/* Navbar */}
 				<div className='navbar bg-primaryLightBg border-b dark:bg-primaryDark border-primaryLightBorder dark:border-primaryDarkBorder w-full fixed top-0 right-0 p-4'>
 					<div className='flex-none lg:hidden'>
@@ -29,10 +29,9 @@ export const Sidebar = ({ children }: SidebarProps) => {
 					<div className='mx-2 flex-1 px-2 block text-2xl text-primaryDarkBg dark:text-white font-bold'>
 						Portfolio CMS
 					</div>
-          <div className='flex lg:hidden'>
-							<ThemeToggler />
-
-          </div>
+					<div className='flex lg:hidden'>
+						<ThemeToggler />
+					</div>
 					<div className='hidden flex-none lg:block'>
 						<ul className='menu menu-horizontal'>
 							{/* Navbar menu content here */}
@@ -41,7 +40,9 @@ export const Sidebar = ({ children }: SidebarProps) => {
 					</div>
 				</div>
 				{/* Page content here */}
-				<div className='h-dvh py-28 lg:py-24 px-7'>{children}</div>
+				<div className='pt-28 pb-8 lg:pt-24 lg:pb-8 px-7 flex flex-1'>
+					{children}
+				</div>
 			</div>
 			<div className='drawer-side'>
 				<label
@@ -49,7 +50,7 @@ export const Sidebar = ({ children }: SidebarProps) => {
 					aria-label='close sidebar'
 					className='drawer-overlay'
 				></label>
-				<ul className='menu dark:bg-[#31363F] bg-primaryLight border-b min-h-full w-80 p-0'>
+				<ul className='menu dark:bg-[#31363F] bg-primaryLight min-h-full w-80 p-0'>
 					{/* Sidebar content here */}
 
 					<div className='p-4 bg-primaryLightBg dark:bg-primaryDark border-b border-primaryLightBorder dark:border-primaryDarkBorder flex items-center justify-between'>
