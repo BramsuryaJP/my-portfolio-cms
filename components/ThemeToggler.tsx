@@ -3,7 +3,14 @@
 import { useTheme } from '@/context/ThemeContextProvider'
 import { Switch } from '@headlessui/react'
 import React, { Fragment, useEffect, useState } from 'react'
-import { BsMoon, BsSun } from 'react-icons/bs'
+import {
+	BsFillMoonStarsFill,
+	BsFillSunFill,
+	BsMoon,
+	BsMoonStars,
+	BsSun,
+} from 'react-icons/bs'
+import { FaMoon, FaRegMoon } from 'react-icons/fa6'
 
 export default function ThemeToggler() {
 	const { theme, toggleTheme } = useTheme()
@@ -24,9 +31,13 @@ export default function ThemeToggler() {
 	}
 
 	return (
-		<div className='text-[#222831] dark:text-white'>
+		<div className='text-[#222831] dark:text-white p-4'>
 			<div className='flex flex-row items-center gap-3'>
-				<BsSun size={16} />
+				{enabled ? (
+					<BsSun size={18} />
+				) : (
+					<BsFillSunFill size={18} color='orange' />
+				)}
 				<Switch
 					checked={enabled}
 					onChange={handleThemeChange}
@@ -51,9 +62,12 @@ export default function ThemeToggler() {
 						</button>
 					)}
 				</Switch>
-				<BsMoon size={14} />
+				{enabled ? (
+					<BsFillMoonStarsFill size={16} color='yellow' />
+				) : (
+					<BsMoonStars size={16} />
+				)}
 			</div>
-			{/* {theme === 'light' ? <BsMoon size={16} /> : <BsSun size={16} />} */}
 		</div>
 	)
 }
