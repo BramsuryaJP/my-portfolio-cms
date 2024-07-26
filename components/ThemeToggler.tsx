@@ -1,7 +1,7 @@
 'use client'
 
-import { useTheme } from '@/context/ThemeContextProvider'
 import { Switch } from '@headlessui/react'
+import { useTheme } from 'next-themes'
 import React, { Fragment, useEffect, useState } from 'react'
 import {
 	BsFillMoonStarsFill,
@@ -13,7 +13,7 @@ import {
 import { FaMoon, FaRegMoon } from 'react-icons/fa6'
 
 export default function ThemeToggler() {
-	const { theme, toggleTheme } = useTheme()
+	const { systemTheme, theme, setTheme } = useTheme()
 
 	const [enabled, setEnabled] = useState(false)
 
@@ -26,7 +26,7 @@ export default function ThemeToggler() {
 	}, [theme])
 
 	const handleThemeChange = () => {
-		toggleTheme()
+		theme === 'dark' ? setTheme('light') : setTheme('dark')
 		setEnabled(!enabled)
 	}
 
