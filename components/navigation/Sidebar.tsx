@@ -1,5 +1,6 @@
 'use client'
 
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { links } from '@/lib/data'
 import { SidebarProps } from './types'
 import Link from 'next/link'
@@ -16,7 +17,7 @@ export const Sidebar = ({ children }: SidebarProps) => {
 			<input id='my-drawer-3' type='checkbox' className='drawer-toggle' />
 			<div className='drawer-content flex flex-col overflow-y-auto'>
 				{/* Navbar */}
-				<div className='navbar bg-primaryLightBg border-b dark:bg-primaryDark border-primaryLightBorder dark:border-primaryDarkBorder w-full fixed top-0 right-0 p-4'>
+				<div className='navbar bg-primaryLightBg border-b dark:bg-primaryDark border-primaryLightBorder dark:border-primaryDarkBorder w-full fixed top-0 right-0 py-1 px-4'>
 					<div className='flex-none lg:hidden'>
 						<label
 							htmlFor='my-drawer-3'
@@ -35,7 +36,24 @@ export const Sidebar = ({ children }: SidebarProps) => {
 					<div className='hidden flex-none lg:block'>
 						<ul className='menu menu-horizontal'>
 							{/* Navbar menu content here */}
-							<ThemeToggler />
+							<Menu>
+								<MenuButton
+									as='button'
+									className='w-10 h-10 rounded-full bg-primaryLight/80 dark:bg-primaryDarkBg/80 backdrop-blur-xl border border-primaryLightBorder dark:border-primaryDarkBorder flex items-center justify-center'
+								>
+									<p className='uppercase text-lg font-semibold text-primaryDark dark:text-white'>
+										N
+									</p>
+								</MenuButton>
+								<MenuItems
+									anchor='bottom end'
+									className='mt-2 p-4 rounded-md dark:bg-primaryDarkBg/50 backdrop-blur-xl border border-primaryLightBorder dark:border-primaryDarkBorder'
+								>
+									<MenuItem>
+										<ThemeToggler />
+									</MenuItem>
+								</MenuItems>
+							</Menu>
 						</ul>
 					</div>
 				</div>
