@@ -20,20 +20,8 @@ export const loginFn = async (data: LoginSchema) => {
 }
 
 export const meFn = async () => {
-	try {
-		const response = await api.get('/api/Auth/me')
-		return response.data
-	} catch (error) {
-		if (axios.isAxiosError(error) && error.response?.status === 401) {
-			// Instead of throwing an error, return an object indicating getting current logged in user failure
-			return {
-				success: false,
-				message: error.response.data.message,
-			}
-		}
-		// For other errors, rethrow
-		throw error
-	}
+	const response = await api.get('/api/Auth/me')
+	return response.data
 }
 
 export const logoutFn = async () => {
