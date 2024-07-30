@@ -1,14 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { loginFn } from '@/api/auth'
 import { useMutation } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { showToast } from '@/lib/helper/ReactToastifyHelper'
+import { useSearchParams } from 'next/navigation'
 import axios from 'axios'
 
 // Define the schema for form validation
@@ -25,6 +26,15 @@ export default function Login(): JSX.Element {
 	const [loading, setLoading] = useState<boolean>(false)
 	const router = useRouter()
 
+	useEffect(() => {
+		const params = new URLSearchParams(window.location.search)
+		const sessionExpired = params.get('sessionExpired')
+		if (sessionExpired === 'true') {
+			showToast('error', 'Session expired. Please login again.')
+			router.push('/login')
+		}
+	}, [])
+
 	const {
 		register,
 		handleSubmit,
@@ -39,28 +49,22 @@ export default function Login(): JSX.Element {
 			setLoading(true)
 		},
 		onSuccess: (res) => {
-			if (res.success === false) {
-				// Login failed due to invalid credentials
-				showToast('error', res.message)
-			} else {
-				// Login successful
-				showToast('success', res.message)
-			}
+			showToast('success', res.message)
+			router.push('/')
 		},
-		onError: () => {
-			showToast(
-				'error',
-				'An unexpected error occurred. Please try again.'
-			)
+		onError: (error) => {
+			if (axios.isAxiosError(error) && error.response?.status === 401) {
+				showToast('error', error.response.data.message)
+				setLoading(false)
+			}
 		},
 		onSettled: () => {
 			setLoading(false)
-			router.push('/')
 		},
 	})
 
 	const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-		handleLogin.mutateAsync(data)
+		handleLogin.mutate(data)
 	}
 
 	const togglePasswordVisibility = (): void => {

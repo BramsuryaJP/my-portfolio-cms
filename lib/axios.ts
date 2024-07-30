@@ -1,5 +1,7 @@
 import { logoutFn } from '@/api/auth'
 import axios from 'axios'
+import { showToast } from './helper/ReactToastifyHelper'
+import { redirect } from 'next/navigation'
 
 const api = axios.create({
 	baseURL: 'http://localhost:5092',
@@ -14,17 +16,20 @@ api.interceptors.response.use(
 	async (error) => {
 		const originalRequest = error.config
 
+		const isLoginRequest = originalRequest.url.endsWith('/login')
+
+		// In your interceptor:
 		if (
 			error.response &&
 			error.response.status === 401 &&
-			!originalRequest.url.includes('/login')
+			!isLoginRequest
 		) {
-			// Token has expired or is invalid
-			await logoutFn()
-
-			// Redirect to login page
-			window.location.href = '/login'
-			return Promise.reject(error)
+			try {
+				await logoutFn()
+				window.location.href = '/login?sessionExpired=true'
+			} catch (error) {
+				return Promise.reject(error)
+			}
 		}
 		return Promise.reject(error)
 	}
