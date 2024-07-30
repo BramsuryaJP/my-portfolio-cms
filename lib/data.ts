@@ -11,8 +11,4 @@ export const links = [
 		name: 'Projects',
 		url: '/projects',
 	},
-	{
-		name: 'Login',
-		url: '/login',
-	},
 ] as const

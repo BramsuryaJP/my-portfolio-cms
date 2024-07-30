@@ -7,10 +7,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { loginFn } from '@/api/auth'
 import { useMutation } from '@tanstack/react-query'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { showToast } from '@/lib/helper/ReactToastifyHelper'
-import { useSearchParams } from 'next/navigation'
 import axios from 'axios'
+import { useAppDispatch } from '@/lib/hooks'
+import { setUser } from '@/lib/features/UserSlices'
 
 // Define the schema for form validation
 const loginSchema = z.object({
@@ -22,9 +23,15 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>
 
 export default function Login(): JSX.Element {
+	// state
 	const [showPassword, setShowPassword] = useState<boolean>(false)
 	const [loading, setLoading] = useState<boolean>(false)
+
+	// router
 	const router = useRouter()
+
+	// global state
+	const dispatch = useAppDispatch()
 
 	useEffect(() => {
 		const params = new URLSearchParams(window.location.search)
@@ -50,6 +57,7 @@ export default function Login(): JSX.Element {
 		},
 		onSuccess: (res) => {
 			showToast('success', res.message)
+			dispatch(setUser({ email: res.email, username: res.username }))
 			router.push('/')
 		},
 		onError: (error) => {

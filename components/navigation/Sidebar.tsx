@@ -1,18 +1,39 @@
 'use client'
 
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { links } from '@/lib/data'
 import { SidebarProps } from './types'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import ThemeToggler from '../ThemeToggler'
-import { FaBars, FaCaretLeft } from 'react-icons/fa6'
+import { usePathname, useRouter } from 'next/navigation'
+import { FaBars } from 'react-icons/fa6'
 import { FaTimes } from 'react-icons/fa'
-import { BiLogOut } from 'react-icons/bi'
 import { ProfileDropdown } from '../auth/ProfileDropdown'
+import { useQuery } from '@tanstack/react-query'
+import { meFn } from '@/api/auth'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import { useEffect } from 'react'
+import { setUser } from '@/lib/features/UserSlices'
 
 export const Sidebar = ({ children }: SidebarProps) => {
 	const pathname = usePathname()
+	const dispatch = useAppDispatch()
+
+	const { data: currentUserData, isLoading: currentUserIsLoading } = useQuery(
+		{
+			queryKey: ['current-user'],
+			queryFn: () => meFn(),
+		}
+	)
+
+	useEffect(() => {
+		if (!currentUserIsLoading) {
+			dispatch(
+				setUser({
+					username: currentUserData?.username,
+					email: currentUserData?.email,
+				})
+			)
+		}
+	}, [currentUserIsLoading])
 
 	return (
 		<div className='drawer lg:drawer-open'>
@@ -33,12 +54,20 @@ export const Sidebar = ({ children }: SidebarProps) => {
 						Portfolio CMS
 					</div>
 					<div className='flex lg:hidden'>
-						<ProfileDropdown />
+						{!currentUserIsLoading && (
+							<ProfileDropdown
+								username={currentUserData?.username}
+							/>
+						)}
 					</div>
 					<div className='hidden flex-none lg:block'>
 						<ul className='menu menu-horizontal'>
 							{/* Navbar menu content here */}
-							<ProfileDropdown />
+							{!currentUserIsLoading && (
+								<ProfileDropdown
+									username={currentUserData?.username}
+								/>
+							)}
 						</ul>
 					</div>
 				</div>
