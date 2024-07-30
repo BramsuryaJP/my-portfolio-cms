@@ -92,11 +92,11 @@ export default function Login() {
 	if (userData === null) {
 		return (
 			<div className='h-full flex items-center justify-center p-4'>
-				<div className='max-w-lg p-8 w-full rounded-xl bg-primaryLight/60 dark:bg-primaryDark/60'>
+				<div className='max-w-lg p-8 w-full rounded-xl bg-primaryLight/5 border-primaryLightBorder border shadow-sm dark:border-none dark:shadow-none dark:bg-primaryDark/60'>
 					<p className='text-primaryDark dark:text-white font-bold text-3xl'>
 						Sign In
 					</p>
-					<p className='text-md mt-2'>
+					<p className='text-md mt-2 text-primaryDark dark:text-white'>
 						Input your email and password to access the CMS
 					</p>
 					<form
@@ -104,17 +104,17 @@ export default function Login() {
 						className='mt-5 flex flex-col gap-5'
 					>
 						<div>
-							<label className='text-sm/6 font-medium text-white'>
+							<label className='text-sm/6 font-medium text-primaryDark dark:text-white'>
 								Username or Email
 							</label>
 							<input
 								{...register('usernameOrEmail')}
 								className={`
-                    mt-3 block w-full rounded-lg border-2 bg-white/5 py-3 ps-3 pe-11 text-sm/6 text-white
+                    mt-3 block w-full rounded-lg border-2 bg-primaryLight dark:bg-white/5 py-3 ps-3 pe-11 text-sm/6 text-primaryDark dark:text-white
                     ${
 						errors.usernameOrEmail
 							? 'border-red-500 focus:border-red-500 outline-none'
-							: 'border-transparent focus:border-white/25 outline-none'
+							: 'border-transparent focus:border-primaryLightBorder dark:focus:border-primaryDarkBorder outline-none'
 					}`}
 							/>
 							{errors.usernameOrEmail && (
@@ -124,7 +124,7 @@ export default function Login() {
 							)}
 						</div>
 						<div>
-							<label className='text-sm/6 font-medium text-white'>
+							<label className='text-sm/6 font-medium text-primaryDark dark:text-white'>
 								Password
 							</label>
 							<div className='relative'>
@@ -132,17 +132,17 @@ export default function Login() {
 									{...register('password')}
 									type={showPassword ? 'text' : 'password'}
 									className={`
-                      mt-3 block w-full rounded-lg border-2 bg-white/5 py-3 ps-3 pe-11 text-sm/6 text-white
+                      mt-3 block w-full rounded-lg border-2 bg-primaryLight dark:bg-white/5 py-3 ps-3 pe-11 text-sm/6 text-primaryDark dark:text-white
                       ${
 							errors.password
 								? 'border-red-500 focus:border-red-500 outline-none'
-								: 'border-transparent focus:border-white/25 outline-none'
+								: 'border-transparent focus:border-primaryLightBorder dark:focus:border-primaryDarkBorder outline-none'
 						}`}
 								/>
 								<button
 									type='button'
 									onClick={togglePasswordVisibility}
-									className='absolute inset-y-0 right-0 pr-3 flex items-center text-white'
+									className='absolute inset-y-0 right-0 pr-3 flex items-center text-primaryDark dark:text-white'
 								>
 									{showPassword ? (
 										<FaRegEyeSlash className='h-5 w-5' />
