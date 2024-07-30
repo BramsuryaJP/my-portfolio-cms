@@ -60,7 +60,6 @@ export default function Login(): JSX.Element {
 	})
 
 	const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-		console.log(data)
 		handleDinerLogin.mutateAsync(data)
 	}
 
