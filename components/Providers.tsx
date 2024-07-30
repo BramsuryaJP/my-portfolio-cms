@@ -8,24 +8,12 @@ import { ThemeProvider, useTheme } from 'next-themes'
 
 export default function Providers({ children }: { children: ReactNode }) {
 	const [queryClient] = useState(() => new QueryClient())
-	const { systemTheme } = useTheme()
 
 	return (
 		<QueryClientProvider client={queryClient}>
 			<ThemeProvider attribute='class'>
 				{children}
-				<ToastContainer
-					position='top-right'
-					autoClose={5000}
-					hideProgressBar={false}
-					newestOnTop={false}
-					closeOnClick
-					rtl={false}
-					pauseOnFocusLoss
-					draggable
-					pauseOnHover
-					theme={systemTheme}
-				/>
+				<ToastContainer />
 			</ThemeProvider>
 		</QueryClientProvider>
 	)
