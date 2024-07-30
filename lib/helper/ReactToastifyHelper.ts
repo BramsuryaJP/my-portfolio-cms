@@ -11,6 +11,7 @@ export const defaultToastOptions: ToastOptions = {
 	theme: 'colored',
 	pauseOnFocusLoss: true,
 	rtl: false,
+  
 }
 
 type ToastType = 'success' | 'error' | 'info' | 'warning' | 'default'

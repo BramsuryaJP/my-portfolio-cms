@@ -10,8 +10,8 @@ import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { showToast } from '@/lib/helper/ReactToastifyHelper'
 import axios from 'axios'
-import { useAppDispatch } from '@/lib/hooks'
-import { setUser } from '@/lib/features/UserSlices'
+import { useAppDispatch, useAppSelector } from '@/lib/hooks'
+import { setStatus, setUser } from '@/lib/features/UserSlices'
 
 // Define the schema for form validation
 const loginSchema = z.object({
@@ -22,25 +22,18 @@ const loginSchema = z.object({
 // Infer the TypeScript type from the schema
 type LoginFormData = z.infer<typeof loginSchema>
 
-export default function Login(): JSX.Element {
+export default function Login() {
 	// state
 	const [showPassword, setShowPassword] = useState<boolean>(false)
 	const [loading, setLoading] = useState<boolean>(false)
 
+	// global state / redux
+	const dispatch = useAppDispatch()
+	const userData = useAppSelector((state) => state.user.data)
+	const userDataStatus = useAppSelector((state) => state.user.status)
+
 	// router
 	const router = useRouter()
-
-	// global state
-	const dispatch = useAppDispatch()
-
-	useEffect(() => {
-		const params = new URLSearchParams(window.location.search)
-		const sessionExpired = params.get('sessionExpired')
-		if (sessionExpired === 'true') {
-			showToast('error', 'Session expired. Please login again.')
-			router.push('/login')
-		}
-	}, [])
 
 	const {
 		register,
@@ -57,7 +50,11 @@ export default function Login(): JSX.Element {
 		},
 		onSuccess: (res) => {
 			showToast('success', res.message)
-			dispatch(setUser({ email: res.email, username: res.username }))
+			const userData = {
+				username: res.username,
+				email: res.email,
+			}
+			dispatch(setUser(userData))
 			router.push('/')
 		},
 		onError: (error) => {
@@ -79,82 +76,97 @@ export default function Login(): JSX.Element {
 		setShowPassword(!showPassword)
 	}
 
-	return (
-		<div className='h-full flex items-center justify-center p-4'>
-			<div className='max-w-lg p-8 w-full rounded-xl bg-primaryLight/60 dark:bg-primaryDark/60'>
-				<p className='text-primaryDark dark:text-white font-bold text-3xl'>
-					Sign In
-				</p>
-				<p className='text-md mt-2'>
-					Input your email and password to access the CMS
-				</p>
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					className='mt-5 flex flex-col gap-5'
-				>
-					<div>
-						<label className='text-sm/6 font-medium text-white'>
-							Username or Email
-						</label>
-						<input
-							{...register('usernameOrEmail')}
-							className={`
-                mt-3 block w-full rounded-lg border-2 bg-white/5 py-3 ps-3 pe-11 text-sm/6 text-white
-                ${
-					errors.usernameOrEmail
-						? 'border-red-500 focus:border-red-500 outline-none'
-						: 'border-transparent focus:border-white/25 outline-none'
-				}`}
-						/>
-						{errors.usernameOrEmail && (
-							<p className='mt-1 text-red-500 text-xs'>
-								{errors.usernameOrEmail.message}
-							</p>
-						)}
-					</div>
-					<div>
-						<label className='text-sm/6 font-medium text-white'>
-							Password
-						</label>
-						<div className='relative'>
+	console.log(userData)
+	console.log(userDataStatus)
+
+	useEffect(() => {
+		if (userDataStatus === 'succeeded' && userData !== null) {
+			router.back()
+		}
+	}, [userDataStatus, userData])
+
+	if (userDataStatus === 'loading' || userDataStatus === 'idle') {
+		return null
+	}
+
+	if (userData === null) {
+		return (
+			<div className='h-full flex items-center justify-center p-4'>
+				<div className='max-w-lg p-8 w-full rounded-xl bg-primaryLight/60 dark:bg-primaryDark/60'>
+					<p className='text-primaryDark dark:text-white font-bold text-3xl'>
+						Sign In
+					</p>
+					<p className='text-md mt-2'>
+						Input your email and password to access the CMS
+					</p>
+					<form
+						onSubmit={handleSubmit(onSubmit)}
+						className='mt-5 flex flex-col gap-5'
+					>
+						<div>
+							<label className='text-sm/6 font-medium text-white'>
+								Username or Email
+							</label>
 							<input
-								{...register('password')}
-								type={showPassword ? 'text' : 'password'}
+								{...register('usernameOrEmail')}
 								className={`
-                  mt-3 block w-full rounded-lg border-2 bg-white/5 py-3 ps-3 pe-11 text-sm/6 text-white
-                  ${
-						errors.password
+                    mt-3 block w-full rounded-lg border-2 bg-white/5 py-3 ps-3 pe-11 text-sm/6 text-white
+                    ${
+						errors.usernameOrEmail
 							? 'border-red-500 focus:border-red-500 outline-none'
 							: 'border-transparent focus:border-white/25 outline-none'
 					}`}
 							/>
-							<button
-								type='button'
-								onClick={togglePasswordVisibility}
-								className='absolute inset-y-0 right-0 pr-3 flex items-center text-white'
-							>
-								{showPassword ? (
-									<FaRegEyeSlash className='h-5 w-5' />
-								) : (
-									<FaRegEye className='h-5 w-5' />
-								)}
-							</button>
+							{errors.usernameOrEmail && (
+								<p className='mt-1 text-red-500 text-xs'>
+									{errors.usernameOrEmail.message}
+								</p>
+							)}
 						</div>
-						{errors.password && (
-							<p className='mt-1 text-red-500 text-xs'>
-								{errors.password.message}
-							</p>
-						)}
-					</div>
-					<button
-						type='submit'
-						className='mt-3 rounded-lg bg-secondary py-3 px-4 text-base font-medium text-white data-[hover]:bg-secondary/60 data-[active]:bg-secondary/80 disabled:bg-secondary/60'
-						disabled={loading}
-					>
-						Sign In
-					</button>
-				</form>
+						<div>
+							<label className='text-sm/6 font-medium text-white'>
+								Password
+							</label>
+							<div className='relative'>
+								<input
+									{...register('password')}
+									type={showPassword ? 'text' : 'password'}
+									className={`
+                      mt-3 block w-full rounded-lg border-2 bg-white/5 py-3 ps-3 pe-11 text-sm/6 text-white
+                      ${
+							errors.password
+								? 'border-red-500 focus:border-red-500 outline-none'
+								: 'border-transparent focus:border-white/25 outline-none'
+						}`}
+								/>
+								<button
+									type='button'
+									onClick={togglePasswordVisibility}
+									className='absolute inset-y-0 right-0 pr-3 flex items-center text-white'
+								>
+									{showPassword ? (
+										<FaRegEyeSlash className='h-5 w-5' />
+									) : (
+										<FaRegEye className='h-5 w-5' />
+									)}
+								</button>
+							</div>
+							{errors.password && (
+								<p className='mt-1 text-red-500 text-xs'>
+									{errors.password.message}
+								</p>
+							)}
+						</div>
+						<button
+							type='submit'
+							className='mt-3 rounded-lg bg-secondary py-3 px-4 text-base font-medium text-white data-[hover]:bg-secondary/60 data-[active]:bg-secondary/80 disabled:bg-secondary/60'
+							disabled={loading}
+						>
+							Sign In
+						</button>
+					</form>
+				</div>
 			</div>
-		</div>
-	)
+		)
+	}
 }

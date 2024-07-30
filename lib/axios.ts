@@ -1,7 +1,5 @@
 import { logoutFn } from '@/api/auth'
 import axios from 'axios'
-import { showToast } from './helper/ReactToastifyHelper'
-import { redirect } from 'next/navigation'
 
 const api = axios.create({
 	baseURL: 'http://localhost:5092',
@@ -26,7 +24,8 @@ api.interceptors.response.use(
 		) {
 			try {
 				await logoutFn()
-				window.location.href = '/login?sessionExpired=true'
+				// Instead of redirecting, we'll throw a special error
+				throw new Error('SESSION_EXPIRED')
 			} catch (error) {
 				return Promise.reject(error)
 			}

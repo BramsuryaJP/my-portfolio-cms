@@ -1,3 +1,3 @@
 export type ProfileTypes = {
-	username: string
+	username: string | null | undefined
 }
