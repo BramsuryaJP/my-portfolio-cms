@@ -33,7 +33,7 @@ export default function Login(): JSX.Element {
 		resolver: zodResolver(loginSchema),
 	})
 
-	const handleDinerLogin = useMutation({
+	const handleLogin = useMutation({
 		mutationFn: (data: LoginFormData) => loginFn(data),
 		onMutate() {
 			setLoading(true)
@@ -45,7 +45,6 @@ export default function Login(): JSX.Element {
 			} else {
 				// Login successful
 				showToast('success', res.message)
-				router.push('/')
 			}
 		},
 		onError: () => {
@@ -56,11 +55,12 @@ export default function Login(): JSX.Element {
 		},
 		onSettled: () => {
 			setLoading(false)
+			router.push('/')
 		},
 	})
 
 	const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-		handleDinerLogin.mutateAsync(data)
+		handleLogin.mutateAsync(data)
 	}
 
 	const togglePasswordVisibility = (): void => {

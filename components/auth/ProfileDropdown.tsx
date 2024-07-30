@@ -1,10 +1,14 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import ThemeToggler from '../ThemeToggler'
 import { BiLogOut } from 'react-icons/bi'
-import { useQuery } from '@tanstack/react-query'
-import { meFn } from '@/api/auth'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { logoutFn, meFn } from '@/api/auth'
+import { showToast } from '@/lib/helper/ReactToastifyHelper'
+import { useRouter } from 'next/navigation'
 
 export const ProfileDropdown = () => {
+	const router = useRouter()
+
 	const { data: currentUserData, isLoading: currentUserIsLoading } = useQuery(
 		{
 			queryKey: ['current-user'],
@@ -12,6 +16,24 @@ export const ProfileDropdown = () => {
 			retry: false,
 		}
 	)
+
+	const handleLogout = useMutation({
+		mutationFn: () => logoutFn(),
+		onMutate() {},
+		onSuccess: (res) => {
+			// Login successful
+			showToast('success', res.message)
+		},
+		onError: () => {
+			showToast(
+				'error',
+				'An unexpected error occurred. Please try again.'
+			)
+		},
+		onSettled: () => {
+			router.push('/login')
+		},
+	})
 
 	if (!currentUserIsLoading) {
 		return (
@@ -35,6 +57,9 @@ export const ProfileDropdown = () => {
 					<MenuItem
 						as='button'
 						className='flex flex-row items-center gap-2 p-4'
+						onClick={() => {
+							handleLogout.mutate()
+						}}
 					>
 						<BiLogOut color='#C63C51' size={20} />
 						<p className='text-sm font-semibold text-[#C63C51]'>
