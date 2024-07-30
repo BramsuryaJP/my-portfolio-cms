@@ -13,7 +13,7 @@ import {
 import { FaMoon, FaRegMoon } from 'react-icons/fa6'
 
 export default function ThemeToggler() {
-	const { systemTheme, theme, setTheme } = useTheme()
+	const { theme, setTheme } = useTheme()
 
 	const [enabled, setEnabled] = useState(false)
 

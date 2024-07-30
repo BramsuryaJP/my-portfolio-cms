@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import './globals.css'
-import { Sidebar } from '@/components/navigation/Sidebar'
-import { ThemeProvider } from 'next-themes'
+import Providers from '@/components/Providers'
 
 const montserrat = Montserrat({ subsets: ['latin'] })
 
@@ -19,9 +18,7 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body className={`${montserrat.className} h-dvh`}>
-				<ThemeProvider attribute='class'>
-					<Sidebar>{children}</Sidebar>
-				</ThemeProvider>
+				<Providers>{children}</Providers>
 			</body>
 		</html>
 	)
