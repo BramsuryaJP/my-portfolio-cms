@@ -76,8 +76,8 @@ export function Table({
 						</div>
 					)}
 					{length !== 0 && (
-						<div className='overflow-x-auto'>
-							<table className='table'>
+						<div className='overflow-x-auto z-0'>
+							<table className='table z-0'>
 								<thead>
 									<tr className='border-b-primaryLightBorder dark:border-b-primaryDarkBorder'>
 										<th>
