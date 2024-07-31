@@ -46,6 +46,15 @@ export default function Skills() {
 		onSuccess: (res) => {
 			showToast('success', res.message)
 			setDeleteConfirmationModalOpen(false)
+			if (
+				res.skill &&
+				res.skill.id &&
+				selectedSkillId.includes(res.skill.id)
+			) {
+				setSelectedSkillId(
+					selectedSkillId.filter((id) => id !== res.skill.id)
+				)
+			}
 			refetchSkillsData()
 		},
 		onError: (error) => {
