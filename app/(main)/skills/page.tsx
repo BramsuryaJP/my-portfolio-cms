@@ -1,19 +1,32 @@
 'use client'
 
-import { getSkillsFn } from '@/api/skills'
+import {
+	deleteMultipleSkillsFn,
+	deleteSingleSkillFn,
+	getSkillsFn,
+} from '@/api/skills'
 import InformationCard from '@/components/card/InformationCard'
+import DeleteConfirmationModal from '@/components/Modal/DeleteConfirmationModal'
 import CreateSkillsModal from '@/components/Modal/Skills/CreateSkillsModal'
 import UpdateSkillsModal from '@/components/Modal/Skills/UpdateSkillsModal'
 import { Table } from '@/components/table'
+import { showToast } from '@/lib/helper/ReactToastifyHelper'
 import { SkillsTableHeader } from '@/lib/tableHeader'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import axios from 'axios'
 import React, { useState } from 'react'
 
 export default function Skills() {
 	const [createSkillModalOpen, setCreateSkillModalOpen] = useState(false)
 	const [updateSkillModalOpen, setUpdateSkillModalOpen] = useState(false)
+	const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
+		useState(false)
+	const [deleteType, setDeleteType] = useState<'single' | 'multiple'>(
+		'single'
+	)
 	const [skillId, setSkillId] = useState(0)
 	const [skillName, setSkillName] = useState('')
+	const [selectedSkillId, setSelectedSkillId] = useState<number[]>([])
 
 	const {
 		data: allSkillsData,
@@ -24,6 +37,39 @@ export default function Skills() {
 		queryFn: async () => {
 			const response = await getSkillsFn()
 			return response
+		},
+	})
+
+	const handleSingleSkillDelete = useMutation({
+		mutationFn: (id: number) => deleteSingleSkillFn(id),
+		onMutate() {},
+		onSuccess: (res) => {
+			showToast('success', res.message)
+			setDeleteConfirmationModalOpen(false)
+			refetchSkillsData()
+		},
+		onError: (error) => {
+			if (axios.isAxiosError(error)) {
+				showToast('error', error.response?.data?.message)
+				setDeleteConfirmationModalOpen(false)
+			}
+		},
+	})
+
+	const handleMultipleSkillsDelete = useMutation({
+		mutationFn: (ids: number[]) => deleteMultipleSkillsFn(ids),
+		onMutate() {},
+		onSuccess: (res) => {
+			showToast('success', res.message)
+			setDeleteConfirmationModalOpen(false)
+			refetchSkillsData()
+			setSelectedSkillId([])
+		},
+		onError: (error) => {
+			if (axios.isAxiosError(error)) {
+				showToast('error', error.response?.data?.message)
+			}
+			setDeleteConfirmationModalOpen(false)
 		},
 	})
 
@@ -41,12 +87,19 @@ export default function Skills() {
 					title='Skills Table'
 					headers={SkillsTableHeader}
 					datas={allSkillsData?.data}
+					refetch={refetchSkillsData}
 					loading={isLoadingSkillsData}
 					length={allSkillsData?.data.length}
 					setCreateModalOpen={setCreateSkillModalOpen}
 					setUpdateModalOpen={setUpdateSkillModalOpen}
+					setDeleteConfirmationModalOpen={
+						setDeleteConfirmationModalOpen
+					}
 					setSkillId={setSkillId}
 					setSkillName={setSkillName}
+					selectedSkillId={selectedSkillId}
+					setSelectedSkillId={setSelectedSkillId}
+					setDeleteType={setDeleteType}
 					modal={
 						<>
 							<CreateSkillsModal
@@ -60,6 +113,25 @@ export default function Skills() {
 								refetch={refetchSkillsData}
 								skillId={skillId}
 								skillName={skillName}
+							/>
+							<DeleteConfirmationModal
+								isOpen={deleteConfirmationModalOpen}
+								setIsOpen={setDeleteConfirmationModalOpen}
+								title='Delete Skill'
+								description="Are you sure you want to delete this skill? you can't undo this action"
+								deleteFn={
+									deleteType === 'single'
+										? () => {
+												handleSingleSkillDelete.mutate(
+													skillId
+												)
+										  }
+										: () => {
+												handleMultipleSkillsDelete.mutate(
+													selectedSkillId
+												)
+										  }
+								}
 							/>
 						</>
 					}

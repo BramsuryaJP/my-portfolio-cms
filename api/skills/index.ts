@@ -18,3 +18,13 @@ export const updateSkillFn = async (
 	const response = await api.put(`/api/Skills/${id}`, data)
 	return response.data
 }
+
+export const deleteSingleSkillFn = async (id: number) => {
+	const response = await api.delete(`/api/Skills/${id}`)
+	return response.data
+}
+
+export const deleteMultipleSkillsFn = async (ids: number[]) => {
+	const response = await api.post('/api/Skills/delete-multiple', ids)
+	return response.data
+}

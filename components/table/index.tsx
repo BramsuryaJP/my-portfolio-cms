@@ -1,6 +1,6 @@
+import React from 'react'
 import { FaPencil, FaTrash } from 'react-icons/fa6'
 import { TableProps } from './types'
-import React from 'react'
 import { BsPlus } from 'react-icons/bs'
 
 export function Table({
@@ -12,9 +12,29 @@ export function Table({
 	modal,
 	setCreateModalOpen,
 	setUpdateModalOpen,
+	setDeleteConfirmationModalOpen,
 	setSkillId,
 	setSkillName,
+	selectedSkillId,
+	setSelectedSkillId,
+	setDeleteType,
 }: TableProps) {
+	const handleCheckboxChange = (id: number) => {
+		setSelectedSkillId(
+			selectedSkillId?.includes(id)
+				? selectedSkillId?.filter((skillId) => skillId !== id)
+				: [...selectedSkillId, id]
+		)
+	}
+
+	const handleMainCheckboxChange = () => {
+		setSelectedSkillId(
+			selectedSkillId?.length === datas?.length
+				? []
+				: datas?.map((data) => data?.id)
+		)
+	}
+
 	return (
 		<React.Fragment>
 			<div className='flex w-full items-center justify-end'>
@@ -29,9 +49,24 @@ export function Table({
 				</button>
 			</div>
 			<div className='mt-5 p-5 bg-primaryLight dark:bg-primaryDark border border-primaryLightBorder dark:border-primaryDarkBorder rounded-lg'>
-				<p className='text-lg font-bold text-primaryDark dark:text-white'>
-					{title}
-				</p>
+				<div className='flex flex-col sm:flex-row justify-between gap-3 items-start'>
+					<p className='text-lg font-bold text-primaryDark dark:text-white'>
+						{title}
+					</p>
+					{selectedSkillId?.length > 0 && (
+						<button
+							type='button'
+							onClick={() => {
+								setDeleteConfirmationModalOpen(true)
+								setDeleteType('multiple')
+							}}
+							className='py-2 px-4 bg-red-500 rounded-md text-white text-md flex gap-2 items-center justify-center'
+						>
+							<FaTrash />
+							Delete selected data
+						</button>
+					)}
+				</div>
 				<div className='mt-5'>
 					{length === 0 && (
 						<div className='w-full flex items-center justify-center'>
@@ -43,14 +78,20 @@ export function Table({
 					{length !== 0 && (
 						<div className='overflow-x-auto'>
 							<table className='table'>
-								{/* head */}
 								<thead>
 									<tr className='border-b-primaryLightBorder dark:border-b-primaryDarkBorder'>
 										<th>
 											<label>
 												<input
 													type='checkbox'
-													className='checkbox [--chkbg:theme(colors.secondary)] [--chkfg:theme(colors.primaryDark)] dark:[--chkfg:theme(colors.white)]'
+													className='checkbox [--chkbg:theme(colors.secondary)] [--chkfg:theme(colors.primaryDark)] dark:[--chkfg:theme(colors.white)] border-primaryDark dark:border-primaryDarkBorder'
+													checked={
+														selectedSkillId?.length ===
+														datas?.length
+													}
+													onChange={
+														handleMainCheckboxChange
+													}
 												/>
 											</label>
 										</th>
@@ -74,7 +115,15 @@ export function Table({
 													<label>
 														<input
 															type='checkbox'
-															className='checkbox [--chkbg:theme(colors.secondary)] [--chkfg:theme(colors.primaryDark)] dark:[--chkfg:theme(colors.white)]'
+															className='checkbox [--chkbg:theme(colors.secondary)] [--chkfg:theme(colors.primaryDark)] dark:[--chkfg:theme(colors.white)] border-primaryDark dark:border-primaryDarkBorder'
+															checked={selectedSkillId?.includes(
+																data.id
+															)}
+															onChange={() =>
+																handleCheckboxChange(
+																	data.id
+																)
+															}
 														/>
 													</label>
 												</th>
@@ -90,7 +139,7 @@ export function Table({
 												<th>
 													<div className='flex flex-row gap-5 text-sm font-bold text-primaryDark dark:text-white'>
 														<button
-                            className='outline-none'
+															className='outline-none'
 															onClick={() => {
 																setUpdateModalOpen(
 																	true
@@ -105,7 +154,20 @@ export function Table({
 														>
 															<FaPencil />
 														</button>
-														<button>
+														<button
+															className='outline-none'
+															onClick={() => {
+																setDeleteConfirmationModalOpen(
+																	true
+																)
+																setSkillId(
+																	data.id
+																)
+																setDeleteType(
+																	'single'
+																)
+															}}
+														>
 															<FaTrash />
 														</button>
 													</div>

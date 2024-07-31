@@ -11,3 +11,11 @@ export type UpdateSkillsModalProps = {
 	skillId: number | null
 	skillName: string
 }
+
+export type DeleteConfirmationModalProps = {
+	isOpen: boolean
+	setIsOpen: (value: boolean) => void
+	title: string
+	description: string
+	deleteFn: () => void
+}
