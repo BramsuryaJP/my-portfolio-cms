@@ -3,6 +3,7 @@
 import { getSkillsFn } from '@/api/skills'
 import InformationCard from '@/components/card/InformationCard'
 import CreateSkillsModal from '@/components/Modal/Skills/CreateSkillsModal'
+import UpdateSkillsModal from '@/components/Modal/Skills/UpdateSkillsModal'
 import { Table } from '@/components/table'
 import { SkillsTableHeader } from '@/lib/tableHeader'
 import { useQuery } from '@tanstack/react-query'
@@ -10,6 +11,9 @@ import React, { useState } from 'react'
 
 export default function Skills() {
 	const [createSkillModalOpen, setCreateSkillModalOpen] = useState(false)
+	const [updateSkillModalOpen, setUpdateSkillModalOpen] = useState(false)
+	const [skillId, setSkillId] = useState(0)
+	const [skillName, setSkillName] = useState('')
 
 	const {
 		data: allSkillsData,
@@ -22,8 +26,6 @@ export default function Skills() {
 			return response
 		},
 	})
-
-	console.log(createSkillModalOpen)
 
 	return (
 		<div className='w-full'>
@@ -41,13 +43,25 @@ export default function Skills() {
 					datas={allSkillsData?.data}
 					loading={isLoadingSkillsData}
 					length={allSkillsData?.data.length}
-					setModalOpen={setCreateSkillModalOpen}
+					setCreateModalOpen={setCreateSkillModalOpen}
+					setUpdateModalOpen={setUpdateSkillModalOpen}
+					setSkillId={setSkillId}
+					setSkillName={setSkillName}
 					modal={
-						<CreateSkillsModal
-							isOpen={createSkillModalOpen}
-							setIsOpen={setCreateSkillModalOpen}
-							refetch={refetchSkillsData}
-						/>
+						<>
+							<CreateSkillsModal
+								isOpen={createSkillModalOpen}
+								setIsOpen={setCreateSkillModalOpen}
+								refetch={refetchSkillsData}
+							/>
+							<UpdateSkillsModal
+								isOpen={updateSkillModalOpen}
+								setIsOpen={setUpdateSkillModalOpen}
+								refetch={refetchSkillsData}
+								skillId={skillId}
+								skillName={skillName}
+							/>
+						</>
 					}
 				/>
 			</div>

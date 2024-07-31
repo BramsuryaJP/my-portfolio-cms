@@ -6,6 +6,9 @@ export type TableProps = {
 	loading: boolean
 	headers: readonly { name: string }[]
 	datas: { id: number; name: string }[]
-	setModalOpen: (value: boolean) => void
+	setCreateModalOpen: (value: boolean) => void
+	setUpdateModalOpen: (value: boolean) => void
 	modal: React.ReactElement
+	setSkillId: (value: number) => void
+	setSkillName: (value: string) => void
 }

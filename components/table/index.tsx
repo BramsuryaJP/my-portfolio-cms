@@ -10,7 +10,10 @@ export function Table({
 	headers,
 	datas,
 	modal,
-	setModalOpen,
+	setCreateModalOpen,
+	setUpdateModalOpen,
+	setSkillId,
+	setSkillName,
 }: TableProps) {
 	return (
 		<React.Fragment>
@@ -18,7 +21,7 @@ export function Table({
 				<button
 					type='button'
 					onClick={() => {
-						setModalOpen(true)
+						setCreateModalOpen(true)
 					}}
 					className='bg-primaryLight dark:bg-primaryDark text-primaryDark dark:text-white border dark:border-primaryDarkBorder rounded-full p-1'
 				>
@@ -86,7 +89,20 @@ export function Table({
 												</td>
 												<th>
 													<div className='flex flex-row gap-5 text-sm font-bold text-primaryDark dark:text-white'>
-														<button>
+														<button
+                            className='outline-none'
+															onClick={() => {
+																setUpdateModalOpen(
+																	true
+																)
+																setSkillId(
+																	data.id
+																)
+																setSkillName(
+																	data.name
+																)
+															}}
+														>
 															<FaPencil />
 														</button>
 														<button>

@@ -14,9 +14,6 @@ export const Sidebar = ({ children }: SidebarProps) => {
 	const userData = useAppSelector((state) => state.user.data)
 	const userDataStatus = useAppSelector((state) => state.user.status)
 
-	console.log(userData)
-	console.log(userDataStatus)
-
 	if (userDataStatus === 'loading') {
 		return null
 	}
