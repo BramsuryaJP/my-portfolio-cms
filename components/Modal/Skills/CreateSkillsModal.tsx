@@ -78,15 +78,15 @@ export default function CreateSkillsModal({
 					<div className='flex min-h-full items-center justify-center p-4'>
 						<DialogPanel
 							transition
-							className='w-full max-w-md rounded-xl bg-white/5 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0'
+							className='w-full max-w-md rounded-xl bg-primaryLight/80 dark:bg-white/5 p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0'
 						>
 							<DialogTitle
 								as='h3'
-								className='text-xl/7 font-medium text-white'
+								className='text-xl/7 font-medium text-primaryDark dark:text-white'
 							>
 								Create Skill
 							</DialogTitle>
-							<p className='text-sm/6 text-white/50'>
+							<p className='text-sm/6 text-primaryDark/80 dark:text-white/50'>
 								Input skill name to create a new skill
 							</p>
 							<div className='mt-4'>
