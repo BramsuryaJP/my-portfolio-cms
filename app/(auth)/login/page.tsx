@@ -76,9 +76,6 @@ export default function Login() {
 		setShowPassword(!showPassword)
 	}
 
-	console.log(userData)
-	console.log(userDataStatus)
-
 	useEffect(() => {
 		if (userDataStatus === 'succeeded' && userData !== null) {
 			router.back()

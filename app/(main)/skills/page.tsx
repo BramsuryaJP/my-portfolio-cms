@@ -2,14 +2,15 @@
 
 import { getSkillsFn } from '@/api/skills'
 import InformationCard from '@/components/card/InformationCard'
+import CreateSkillsModal from '@/components/Modal/Skills/CreateSkillsModal'
 import { Table } from '@/components/table'
 import { SkillsTableHeader } from '@/lib/tableHeader'
 import { useQuery } from '@tanstack/react-query'
-import React from 'react'
-import { BsPlus } from 'react-icons/bs'
-import { FaPencil, FaTrash } from 'react-icons/fa6'
+import React, { useState } from 'react'
 
 export default function Skills() {
+	const [createSkillModalOpen, setCreateSkillModalOpen] = useState(false)
+
 	const {
 		data: allSkillsData,
 		refetch: refetchSkillsData,
@@ -22,7 +23,7 @@ export default function Skills() {
 		},
 	})
 
-	console.log(allSkillsData)
+	console.log(createSkillModalOpen)
 
 	return (
 		<div className='w-full'>
@@ -34,17 +35,20 @@ export default function Skills() {
 				/>
 			</div>
 			<div className='mt-5'>
-				<div className='flex w-full items-center justify-end'>
-					<button className='bg-primaryLight dark:bg-primaryDark text-primaryDark dark:text-white border dark:border-primaryDarkBorder rounded-full p-1'>
-						<BsPlus size={28} />
-					</button>
-				</div>
 				<Table
 					title='Skills Table'
 					headers={SkillsTableHeader}
 					datas={allSkillsData?.data}
 					loading={isLoadingSkillsData}
 					length={allSkillsData?.data.length}
+					setModalOpen={setCreateSkillModalOpen}
+					modal={
+						<CreateSkillsModal
+							isOpen={createSkillModalOpen}
+							setIsOpen={setCreateSkillModalOpen}
+							refetch={refetchSkillsData}
+						/>
+					}
 				/>
 			</div>
 		</div>
