@@ -2,7 +2,6 @@ import React from 'react'
 
 export type TableProps = {
 	title: string
-	length: number
 	loading: boolean
 	headers: readonly { name: string }[]
 	refetch: () => void
@@ -16,4 +15,11 @@ export type TableProps = {
 	selectedSkillId: number[]
 	setSelectedSkillId: (value: number[]) => void
 	setDeleteType: (value: 'single' | 'multiple') => void
+	currentPage: number
+	totalPages: number
+	limit: number
+	totalCount: number
+	onNextPage: () => void
+	onPrevPage: () => void
+	onLimitChange: (limit: number) => void
 }

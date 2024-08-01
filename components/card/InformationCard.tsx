@@ -2,7 +2,7 @@ import { InformationCardProps } from './types'
 
 export default function InformationCard({
 	title,
-	length,
+	totalCount,
 	loading,
 }: InformationCardProps) {
 	return (
@@ -13,7 +13,7 @@ export default function InformationCard({
 
 			{!loading && (
 				<p className='mt-2 text-xl font-bold text-primaryDark dark:text-white'>
-					{length}
+					{totalCount}
 				</p>
 			)}
 

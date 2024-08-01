@@ -1,11 +1,15 @@
 import React from 'react'
-import { FaPencil, FaTrash } from 'react-icons/fa6'
+import {
+	FaChevronLeft,
+	FaChevronRight,
+	FaPencil,
+	FaTrash,
+} from 'react-icons/fa6'
 import { TableProps } from './types'
 import { BsPlus } from 'react-icons/bs'
 
 export function Table({
 	title,
-	length,
 	loading,
 	headers,
 	datas,
@@ -18,6 +22,13 @@ export function Table({
 	selectedSkillId,
 	setSelectedSkillId,
 	setDeleteType,
+	currentPage,
+	totalPages,
+	limit,
+	totalCount,
+	onNextPage,
+	onPrevPage,
+	onLimitChange,
 }: TableProps) {
 	const handleCheckboxChange = (id: number) => {
 		setSelectedSkillId(
@@ -68,14 +79,14 @@ export function Table({
 					)}
 				</div>
 				<div className='mt-5'>
-					{length === 0 && (
+					{totalCount === 0 && (
 						<div className='w-full flex items-center justify-center'>
 							<p className='text-primaryDark dark:text-white font-medium text-sm'>
 								No Data Available
 							</p>
 						</div>
 					)}
-					{length !== 0 && (
+					{totalCount !== 0 && (
 						<div className='overflow-x-auto z-0'>
 							<table className='table z-0'>
 								<thead>
@@ -176,6 +187,58 @@ export function Table({
 										))}
 								</tbody>
 							</table>
+
+							<div className='mt-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-0'>
+								<div className='flex items-center'>
+									<span className='mr-2 text-sm font-medium text-primaryDark dark:text-white'>
+										Show
+									</span>
+									<select
+										value={limit}
+										onChange={(e) =>
+											onLimitChange(
+												Number(e.target.value)
+											)
+										}
+										className='border outline-none rounded-md px-1 py-1 text-sm bg-primaryLightBg dark:bg-primaryDarkBg text-primaryDark dark:text-white border-primaryLightBorder dark:border-primaryDarkBorder'
+									>
+										<option value={5}>5</option>
+										<option value={10}>10</option>
+										<option value={25}>25</option>
+										<option value={50}>50</option>
+									</select>
+								</div>
+
+								<div className='flex justify-between items-center gap-5'>
+									<span className='text-sm font-medium text-primaryDark dark:text-white text-center sm:text-left'>
+										Showing {(currentPage - 1) * limit + 1}{' '}
+										to{' '}
+										{Math.min(
+											currentPage * limit,
+											totalCount
+										)}{' '}
+										of {totalCount}
+									</span>
+									<div className='flex gap-2 justify-center sm:justify-start'>
+										<button
+											onClick={onPrevPage}
+											disabled={currentPage === 1}
+											className='px-3 py-2 outline-none text-sm bg-primaryLightBg dark:bg-primaryDarkBg text-primaryDark dark:text-primaryLight border border-primaryLightBorder dark:border-primaryDarkBorder rounded-md disabled:opacity-50 disabled:cursor-not-allowed'
+										>
+											<FaChevronLeft />
+										</button>
+										<button
+											onClick={onNextPage}
+											disabled={
+												currentPage === totalPages
+											}
+											className='px-3 py-2 outline-none text-sm bg-primaryLightBg dark:bg-primaryDarkBg text-primaryDark dark:text-primaryLight border border-primaryLightBorder dark:border-primaryDarkBorder rounded-md disabled:opacity-50 disabled:cursor-not-allowed'
+										>
+											<FaChevronRight />
+										</button>
+									</div>
+								</div>
+							</div>
 						</div>
 					)}
 				</div>

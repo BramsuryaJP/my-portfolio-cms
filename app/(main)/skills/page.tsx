@@ -12,33 +12,73 @@ import UpdateSkillsModal from '@/components/Modal/Skills/UpdateSkillsModal'
 import { Table } from '@/components/table'
 import { showToast } from '@/lib/helper/ReactToastifyHelper'
 import { SkillsTableHeader } from '@/lib/tableHeader'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function Skills() {
+	// skill modal open state
 	const [createSkillModalOpen, setCreateSkillModalOpen] = useState(false)
 	const [updateSkillModalOpen, setUpdateSkillModalOpen] = useState(false)
 	const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
 		useState(false)
+
+	// skill delete type state
 	const [deleteType, setDeleteType] = useState<'single' | 'multiple'>(
 		'single'
 	)
+
+	// skill state
 	const [skillId, setSkillId] = useState(0)
 	const [skillName, setSkillName] = useState('')
 	const [selectedSkillId, setSelectedSkillId] = useState<number[]>([])
+
+	// pagination state
+	const [currentPage, setCurrentPage] = useState(1)
+	const [limit, setLimit] = useState(5)
+	const [totalPages, setTotalPages] = useState(1)
+	const [totalCount, setTotalCount] = useState(0)
 
 	const {
 		data: allSkillsData,
 		refetch: refetchSkillsData,
 		isLoading: isLoadingSkillsData,
 	} = useQuery({
-		queryKey: ['all-skills'],
+		queryKey: ['all-skills', currentPage, limit],
 		queryFn: async () => {
-			const response = await getSkillsFn()
+			const response = await getSkillsFn(currentPage, limit)
+			setTotalPages(calculateTotalPages(response.totalCount, limit))
+			setTotalCount(response.totalCount)
 			return response
 		},
+		placeholderData: keepPreviousData,
 	})
+
+	const calculateTotalPages = (totalCount: number, limit: number) => {
+		return Math.ceil(totalCount / limit)
+	}
+
+	const handleNextPage = () => {
+		if (currentPage < totalPages) {
+			setCurrentPage((prev) => prev + 1)
+		}
+	}
+
+	const handlePrevPage = () => {
+		if (currentPage > 1) {
+			setCurrentPage((prev) => prev - 1)
+		}
+	}
+
+	const handleLimitChange = (newLimit: number) => {
+		setLimit(newLimit)
+		setCurrentPage(1) // Reset to first page when changing limit
+		setTotalPages(calculateTotalPages(totalCount, newLimit)) // Recalculate total pages
+	}
+
+	useEffect(() => {
+		setTotalPages(calculateTotalPages(totalCount, limit))
+	}, [totalCount, limit])
 
 	const handleSingleSkillDelete = useMutation({
 		mutationFn: (id: number) => deleteSingleSkillFn(id),
@@ -82,12 +122,14 @@ export default function Skills() {
 		},
 	})
 
+	console.log(totalPages)
+
 	return (
 		<div className='w-full'>
 			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'>
 				<InformationCard
 					title='Skills'
-					length={allSkillsData?.data.length}
+					totalCount={totalCount}
 					loading={isLoadingSkillsData}
 				/>
 			</div>
@@ -96,9 +138,15 @@ export default function Skills() {
 					title='Skills Table'
 					headers={SkillsTableHeader}
 					datas={allSkillsData?.data}
+					currentPage={currentPage}
+					totalPages={totalPages}
+					limit={limit}
+					totalCount={totalCount}
+					onNextPage={handleNextPage}
+					onPrevPage={handlePrevPage}
+					onLimitChange={handleLimitChange}
 					refetch={refetchSkillsData}
 					loading={isLoadingSkillsData}
-					length={allSkillsData?.data.length}
 					setCreateModalOpen={setCreateSkillModalOpen}
 					setUpdateModalOpen={setUpdateSkillModalOpen}
 					setDeleteConfirmationModalOpen={

@@ -1,5 +1,5 @@
 export type InformationCardProps = {
 	title: string
-	length: number
+	totalCount: number
 	loading: boolean
 }
