@@ -6,7 +6,7 @@ export default function NotFound() {
 	const router = useRouter()
 
 	return (
-		<div className='w-full flex items-center justify-center'>
+		<div className='h-full w-full flex items-center justify-center'>
 			<section>
 				<div className='py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6'>
 					<div className='mx-auto max-w-screen-sm text-center'>
