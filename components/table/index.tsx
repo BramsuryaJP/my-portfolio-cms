@@ -117,7 +117,7 @@ export function Table({
 								</thead>
 								<tbody>
 									{!loading &&
-										datas.map((data, index) => (
+										datas?.map((data, index) => (
 											<tr
 												className='border-b-primaryLightBorder dark:border-b-primaryDarkBorder'
 												key={index}
