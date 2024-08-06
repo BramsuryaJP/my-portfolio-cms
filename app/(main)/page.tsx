@@ -1,18 +1,19 @@
-import AnalyticsChart from '@/components/analytics/AnalyticsSummary'
+import { AnalyticsSummary } from '@/components/analytics/AnalyticsSummary'
 import Greetings from '@/components/Greetings'
-import { getAnalyticsData } from '@/lib/analytics'
+import { fetchAnalyticsData } from '../actions/analytics'
 
 export default async function Home() {
-	const analyticsData = await getAnalyticsData()
-
-  console.log(analyticsData);
-  
+	// Fetch initial data for 'all time'
+	const initialData = await fetchAnalyticsData('all')
 
 	return (
-		<div>
+		<div className='w-full'>
 			<Greetings />
 			<div className='mt-5'></div>
-			<AnalyticsChart data={analyticsData} />
+			<AnalyticsSummary
+				initialData={initialData}
+				fetchAnalyticsData={fetchAnalyticsData}
+			/>
 		</div>
 	)
 }

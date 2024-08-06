@@ -28,7 +28,7 @@ export const Sidebar = ({ children }: SidebarProps) => {
 				/>
 				<div className='drawer-content flex flex-col overflow-y-auto'>
 					{/* Navbar */}
-					<div className='navbar bg-primaryLightBg border-b dark:bg-primaryDark border-primaryLightBorder dark:border-primaryDarkBorder w-full fixed top-0 right-0 py-1 px-4 z-20'>
+					<div className='navbar bg-primaryLightBg border-b dark:bg-primaryDark border-primaryLightBorder dark:border-primaryDarkBorder w-full fixed top-0 right-0 py-1 px-4 z-20 lg:z-40'>
 						<div className='flex-none lg:hidden'>
 							<label
 								htmlFor='my-drawer-3'
@@ -59,7 +59,7 @@ export const Sidebar = ({ children }: SidebarProps) => {
 						{children}
 					</div>
 				</div>
-				<div className='drawer-side'>
+				<div className='drawer-side z-30'>
 					<label
 						htmlFor='my-drawer-3'
 						aria-label='close sidebar'
@@ -68,7 +68,7 @@ export const Sidebar = ({ children }: SidebarProps) => {
 					<ul className='menu dark:bg-[#31363F] bg-primaryLight min-h-full w-80 p-0'>
 						{/* Sidebar content here */}
 
-						<div className='p-4 bg-primaryLightBg dark:bg-primaryDark border-b border-primaryLightBorder dark:border-primaryDarkBorder flex items-center justify-between'>
+						<div className='py-[7.5px] lg:py-4 px-4 bg-primaryLightBg dark:bg-primaryDark border-b border-primaryLightBorder dark:border-primaryDarkBorder flex items-center justify-between'>
 							<p className='ps-4 text-2xl text-primaryDarkBg dark:text-white font-bold'>
 								Portfolio CMS
 							</p>

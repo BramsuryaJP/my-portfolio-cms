@@ -6,4 +6,8 @@
 	body {
 		@apply bg-primaryLightBg dark:bg-primaryDarkBg;
 	}
+
+  .google-visualization-tooltip {
+    @apply bg-primaryDarkBg dark:bg-primaryLightBg;
+  }
 }

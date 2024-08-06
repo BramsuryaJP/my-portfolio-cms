@@ -44,7 +44,7 @@ export const ProfileDropdown = ({ username }: ProfileTypes) => {
 			</MenuButton>
 			<MenuItems
 				anchor='bottom end'
-				className='mt-2 rounded-md dark:bg-primaryDarkBg/50 backdrop-blur-xl border border-primaryLightBorder dark:border-primaryDarkBorder z-30'
+				className='mt-2 rounded-md dark:bg-primaryDarkBg/50 backdrop-blur-xl border border-primaryLightBorder dark:border-primaryDarkBorder z-50'
 			>
 				<MenuItem>
 					<ThemeToggler />

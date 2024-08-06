@@ -1,50 +1,62 @@
 'use client'
 
-import { ApexOptions } from 'apexcharts'
-import dynamic from 'next/dynamic'
-import { AnalyticsData } from '@/lib/analytics'
+import { useEffect, useState } from 'react'
+import ActiveUsersChart from './ActiveUsersChart'
+import PageViewersChart from './PageViewsChart'
+import { AnalyticsSummaryProps } from './types'
+import TimeFilterButton from './TimeFilterButton'
 
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
+export const AnalyticsSummary = ({
+	initialData,
+	fetchAnalyticsData,
+}: AnalyticsSummaryProps) => {
+	const [timeFilter, setTimeFilter] = useState('all')
+	const [data, setData] = useState(initialData)
+	const [isLoading, setIsLoading] = useState(true)
 
-interface Props {
-	data: AnalyticsData[]
-}
+	useEffect(() => {
+		async function fetchData() {
+			setIsLoading(true)
+			try {
+				const newData = await fetchAnalyticsData(timeFilter)
+				setData(newData)
+			} catch (error) {
+				console.error('Error fetching data:', error)
+				// Handle error as needed
+			} finally {
+				setIsLoading(false)
+			}
+		}
+		fetchData()
+	}, [timeFilter, fetchAnalyticsData])
 
-export default function AnalyticsChart({ data }: Props) {
-	const chartOptions: ApexOptions = {
-		chart: {
-			type: 'line',
-			height: 350,
-		},
-		title: {
-			text: 'Active Users Over Time',
-		},
-		xaxis: {
-			categories: data.map((item) => item.date),
-			title: {
-				text: 'Date',
-			},
-		},
-		yaxis: {
-			title: {
-				text: 'Active Users',
-			},
-		},
+	const handleTimeFilterChange = (newFilter: string) => {
+		setTimeFilter(newFilter)
 	}
 
-	const series = [
-		{
-			name: 'Active Users',
-			data: data.map((item) => item.activeUsers),
-		},
-	]
-
 	return (
-		<Chart
-			options={chartOptions}
-			series={series}
-			type='line'
-			height={350}
-		/>
+		<div className='p-5 bg-primaryLight dark:bg-primaryDark rounded-xl'>
+			<div className='flex justify-between items-center gap-5 mb-5'>
+				<p className='text-xl text-primaryDark dark:text-white font-semibold'>
+					Analytics Summary
+				</p>
+				<TimeFilterButton
+					timeFilter={timeFilter}
+					handleTimeFilterChange={handleTimeFilterChange}
+				/>
+			</div>
+			{isLoading && (
+				<div className='grid grid-cols-1 xl:grid-cols-2 w-full gap-5 animate-pulse'>
+					<div className='w-full h-[350px] bg-primaryLightBg dark:bg-primaryDarkBg rounded-2xl'></div>
+					<div className='w-full h-[350px] bg-primaryLightBg dark:bg-primaryDarkBg rounded-2xl'></div>
+				</div>
+			)}
+			{!isLoading && (
+				<div className='grid grid-cols-1 xl:grid-cols-2 w-full gap-5'>
+					<ActiveUsersChart data={data.userActiveData} />
+					<PageViewersChart data={data.pageViewersData} />
+				</div>
+			)}
+		</div>
 	)
 }
