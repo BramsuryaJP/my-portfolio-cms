@@ -60,7 +60,6 @@ export default function CreateSkillsModal({
 	})
 
 	const onSubmit: SubmitHandler<CreateSkillData> = (data) => {
-		console.log(data)
 		handleCreateSkill.mutate(data)
 	}
 

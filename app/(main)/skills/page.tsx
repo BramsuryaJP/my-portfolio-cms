@@ -80,6 +80,10 @@ export default function Skills() {
 		setTotalPages(calculateTotalPages(totalCount, limit))
 	}, [totalCount, limit])
 
+	useEffect(() => {
+		setTotalCount(allSkillsData?.totalCount)
+	}, [allSkillsData])
+
 	const handleSingleSkillDelete = useMutation({
 		mutationFn: (id: number) => deleteSingleSkillFn(id),
 		onMutate() {},
@@ -121,11 +125,6 @@ export default function Skills() {
 			setDeleteConfirmationModalOpen(false)
 		},
 	})
-
-  console.log(allSkillsData);
-  console.log(isLoadingSkillsData);
-  
-  
 
 	return (
 		<div className='w-full'>
