@@ -1,10 +1,10 @@
-import { getSkillsFn } from '@/api/skills'
+import { getProjectsFn } from '@/api/projects'
 import {
 	dehydrate,
 	HydrationBoundary,
 	QueryClient,
 } from '@tanstack/react-query'
-import Skills from './skills'
+import Projects from './projects'
 
 export default async function PostsPage() {
 	const initialPage = 1
@@ -13,15 +13,15 @@ export default async function PostsPage() {
 	const queryClient = new QueryClient()
 
 	await queryClient.prefetchQuery({
-		queryKey: ['all-skills', initialPage, initialLimit],
-		queryFn: () => getSkillsFn(initialPage, initialLimit),
+		queryKey: ['all-projects', initialPage, initialLimit],
+		queryFn: () => getProjectsFn(initialPage, initialLimit),
 	})
 
 	return (
 		// Neat! Serialization is now as easy as passing props.
 		// HydrationBoundary is a Client Component, so hydration will happen there.
 		<HydrationBoundary state={dehydrate(queryClient)}>
-			<Skills />
+			<Projects />
 		</HydrationBoundary>
 	)
 }

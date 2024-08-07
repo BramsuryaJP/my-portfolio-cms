@@ -22,6 +22,12 @@ export default function InformationCard({
 					0
 				</p>
 			)}
+
+			{loading === undefined && (
+				<p className='mt-2 text-xl font-bold text-primaryDark dark:text-white'>
+					0
+				</p>
+			)}
 		</div>
 	)
 }

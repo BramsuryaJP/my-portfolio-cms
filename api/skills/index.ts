@@ -3,7 +3,7 @@ import { CreateSkillSchema } from './types'
 
 export const getSkillsFn = async (page: number = 1, limit: number = 5) => {
 	const response = await api.get(
-		`/api/skills/paged?page=${page}&limit=${limit}`
+		`/api/Skills/paged?page=${page}&limit=${limit}`
 	)
 	return response.data
 }
