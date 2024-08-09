@@ -9,7 +9,15 @@ import {
 import { TableProps } from './types'
 import { BsFillGrid3X3GapFill, BsPlus } from 'react-icons/bs'
 
-export function Table<T extends { id: number; name: string }>({
+export function Table<
+	T extends {
+		id: number
+		name: string
+		description: string
+		tags: string[]
+		image: string
+	}
+>({
 	title,
 	loading,
 	headers,
@@ -20,6 +28,9 @@ export function Table<T extends { id: number; name: string }>({
 	setDeleteConfirmationModalOpen,
 	setItemId,
 	setItemName,
+	setItemDescription,
+	setItemTags,
+	setItemImage,
 	selectedItemId,
 	setSelectedItemId,
 	setDeleteType,
@@ -34,6 +45,7 @@ export function Table<T extends { id: number; name: string }>({
 	setTableLayout,
 	gridLayout,
 	setGridLayout,
+	gridComponent,
 }: TableProps<T>) {
 	const handleCheckboxChange = (id: number) => {
 		if (setSelectedItemId) {
@@ -249,6 +261,18 @@ export function Table<T extends { id: number; name: string }>({
 																						setItemName(
 																							data.name
 																						)
+																					setItemDescription &&
+																						setItemDescription(
+																							data.description
+																						)
+																					setItemTags &&
+																						setItemTags(
+																							data.tags
+																						)
+																					setItemImage &&
+																						setItemImage(
+																							data.image
+																						)
 																				}}
 																			>
 																				<FaPencil />
@@ -349,6 +373,18 @@ export function Table<T extends { id: number; name: string }>({
 					</div>
 				</div>
 			)}
+			{gridLayout &&
+				gridLayout !== undefined &&
+				gridComponent !== undefined && (
+					<div className='mt-5'>
+						<div>
+							<p className='text-lg font-bold text-primaryDark dark:text-white'>
+								{title}
+							</p>
+							{gridComponent}
+						</div>
+					</div>
+				)}
 			{modal}
 		</React.Fragment>
 	)

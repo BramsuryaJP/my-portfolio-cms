@@ -136,7 +136,13 @@ export default function Skills() {
 				/>
 			</div>
 			<div className='mt-5'>
-				<Table<{ id: number; name: string }>
+				<Table<{
+					id: number
+					name: string
+					tags: string[]
+					image: string
+					description: string
+				}>
 					title='Skills Table'
 					headers={SkillsTableHeader}
 					datas={allSkillsData?.data}

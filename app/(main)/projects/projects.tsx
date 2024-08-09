@@ -1,19 +1,43 @@
 'use client'
 
-import { getProjectsFn } from '@/api/projects'
+import {
+	deleteMultipleProjectsFn,
+	deleteSingleProjectFn,
+	getProjectsFn,
+} from '@/api/projects'
 import InformationCard from '@/components/card/InformationCard'
+import { ProjectsGrid } from '@/components/grid/ProjectsGrid'
+import DeleteConfirmationModal from '@/components/Modal/DeleteConfirmationModal'
+import CreateProjectsModal from '@/components/Modal/Projects/CreateProjectsModal'
+import UpdateProjectsModal from '@/components/Modal/Projects/UpdateProjectsModal'
 import { Table } from '@/components/table'
+import { showToast } from '@/lib/helper/ReactToastifyHelper'
 import { ProjectsTableHeader } from '@/lib/tableHeader'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
+import { isAxiosError } from 'axios'
 import { useEffect, useState } from 'react'
 
 export default function Projects() {
 	const [tableLayout, setTableLayout] = useState(true)
 	const [gridLayout, setGridLayout] = useState(false)
 
+	// skill modal open state
+	const [createSkillModalOpen, setCreateSkillModalOpen] = useState(false)
+	const [updateSkillModalOpen, setUpdateSkillModalOpen] = useState(false)
+	const [deleteConfirmationModalOpen, setDeleteConfirmationModalOpen] =
+		useState(false)
+
+	// skill delete type state
+	const [deleteType, setDeleteType] = useState<'single' | 'multiple'>(
+		'single'
+	)
+
 	// projects state
 	const [projectId, setProjectId] = useState(0)
 	const [projectName, setProjectName] = useState('')
+	const [projectDescription, setProjectDescription] = useState('')
+	const [projectTags, setProjectTags] = useState<string[]>([])
+	const [projectImage, setProjectImage] = useState('')
 	const [selectedProjectId, setSelectedProjectId] = useState<number[]>([])
 
 	// pagination state
@@ -35,6 +59,48 @@ export default function Projects() {
 			return response
 		},
 		placeholderData: keepPreviousData,
+	})
+
+	const handleSingleSkillDelete = useMutation({
+		mutationFn: (id: number) => deleteSingleProjectFn(id),
+		onMutate() {},
+		onSuccess: (res) => {
+			showToast('success', res.message)
+			setDeleteConfirmationModalOpen(false)
+			if (
+				res.skill &&
+				res.skill.id &&
+				selectedProjectId.includes(res.skill.id)
+			) {
+				setSelectedProjectId(
+					selectedProjectId.filter((id) => id !== res.skill.id)
+				)
+			}
+			refetchProjectsData()
+		},
+		onError: (error) => {
+			if (isAxiosError(error)) {
+				showToast('error', error.response?.data?.message)
+				setDeleteConfirmationModalOpen(false)
+			}
+		},
+	})
+
+	const handleMultipleSkillsDelete = useMutation({
+		mutationFn: (ids: number[]) => deleteMultipleProjectsFn(ids),
+		onMutate() {},
+		onSuccess: (res) => {
+			showToast('success', res.message)
+			setDeleteConfirmationModalOpen(false)
+			refetchProjectsData()
+			setSelectedProjectId([])
+		},
+		onError: (error) => {
+			if (isAxiosError(error)) {
+				showToast('error', error.response?.data?.message)
+			}
+			setDeleteConfirmationModalOpen(false)
+		},
 	})
 
 	const calculateTotalPages = (totalCount: number, limit: number) => {
@@ -77,8 +143,13 @@ export default function Projects() {
 				/>
 			</div>
 			<div className='mt-5'>
-				<Table
-        <{ id: number; name: string; tags: string[]; description: string }>
+				<Table<{
+					id: number
+					name: string
+					tags: string[]
+					image: string
+					description: string
+				}>
 					title={tableLayout ? 'Projects Table' : 'Projects Grid'}
 					headers={ProjectsTableHeader}
 					tableLayout={tableLayout}
@@ -95,51 +166,79 @@ export default function Projects() {
 					onLimitChange={handleLimitChange}
 					refetch={refetchProjectsData}
 					loading={isLoadingProjectsData}
-					// setCreateModalOpen={setCreateSkillModalOpen}
-					// setUpdateModalOpen={setUpdateSkillModalOpen}
-					// setDeleteConfirmationModalOpen={
-					// 	setDeleteConfirmationModalOpen
-					// }
+					gridComponent={
+						<ProjectsGrid<{
+							id: number
+							name: string
+							tags: string[]
+							description: string
+							image: string
+						}>
+							datas={allProjectsData?.data}
+							setUpdateModalOpen={setUpdateSkillModalOpen}
+							setDeleteConfirmationModalOpen={
+								setDeleteConfirmationModalOpen
+							}
+							setItemId={setProjectId}
+							setItemName={setProjectName}
+							setItemDescription={setProjectDescription}
+							setItemTags={setProjectTags}
+							setItemImage={setProjectImage}
+							setSelectedItemId={setSelectedProjectId}
+							setDeleteType={setDeleteType}
+						/>
+					}
+					setCreateModalOpen={setCreateSkillModalOpen}
+					setUpdateModalOpen={setUpdateSkillModalOpen}
+					setDeleteConfirmationModalOpen={
+						setDeleteConfirmationModalOpen
+					}
 					setItemId={setProjectId}
 					setItemName={setProjectName}
+					setItemDescription={setProjectDescription}
+					setItemTags={setProjectTags}
+					setItemImage={setProjectImage}
 					selectedItemId={selectedProjectId}
 					setSelectedItemId={setSelectedProjectId}
-					// setDeleteType={setDeleteType}
-					// modal={
-					// 	<>
-					// 		<CreateSkillsModal
-					// 			isOpen={createSkillModalOpen}
-					// 			setIsOpen={setCreateSkillModalOpen}
-					// 			refetch={refetchSkillsData}
-					// 		/>
-					// 		<UpdateSkillsModal
-					// 			isOpen={updateSkillModalOpen}
-					// 			setIsOpen={setUpdateSkillModalOpen}
-					// 			refetch={refetchSkillsData}
-					// 			skillId={skillId}
-					// 			skillName={skillName}
-					// 		/>
-					// 		<DeleteConfirmationModal
-					// 			isOpen={deleteConfirmationModalOpen}
-					// 			setIsOpen={setDeleteConfirmationModalOpen}
-					// 			title='Delete Skill'
-					// 			description="Are you sure you want to delete this skill? you can't undo this action"
-					// 			deleteFn={
-					// 				deleteType === 'single'
-					// 					? () => {
-					// 							handleSingleSkillDelete.mutate(
-					// 								skillId
-					// 							)
-					// 					  }
-					// 					: () => {
-					// 							handleMultipleSkillsDelete.mutate(
-					// 								selectedSkillId
-					// 							)
-					// 					  }
-					// 			}
-					// 		/>
-					// 	</>
-					// }
+					setDeleteType={setDeleteType}
+					modal={
+						<>
+							<CreateProjectsModal
+								isOpen={createSkillModalOpen}
+								setIsOpen={setCreateSkillModalOpen}
+								refetch={refetchProjectsData}
+							/>
+							<UpdateProjectsModal
+								isOpen={updateSkillModalOpen}
+								setIsOpen={setUpdateSkillModalOpen}
+								refetch={refetchProjectsData}
+								projectId={projectId}
+								projectName={projectName}
+								projectDescription={projectDescription}
+								projectTags={projectTags}
+								projectImage={projectImage}
+							/>
+							<DeleteConfirmationModal
+								isOpen={deleteConfirmationModalOpen}
+								setIsOpen={setDeleteConfirmationModalOpen}
+								title='Delete Project'
+								description="Are you sure you want to delete this project? you can't undo this action"
+								deleteFn={
+									deleteType === 'single'
+										? () => {
+												handleSingleSkillDelete.mutate(
+													projectId
+												)
+										  }
+										: () => {
+												handleMultipleSkillsDelete.mutate(
+													selectedProjectId
+												)
+										  }
+								}
+							/>
+						</>
+					}
 				/>
 			</div>
 		</div>

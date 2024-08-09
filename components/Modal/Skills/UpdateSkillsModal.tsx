@@ -63,7 +63,6 @@ export default function UpdateSkillsModal({
 		},
 		onSettled: () => {
 			setLoading(false)
-			reset()
 		},
 	})
 
@@ -85,7 +84,7 @@ export default function UpdateSkillsModal({
 			<Dialog
 				open={isOpen}
 				as='div'
-				className='relative z-10 focus:outline-none'
+				className='relative z-40 focus:outline-none'
 				onClose={() => {}}
 			>
 				<DialogBackdrop className='fixed inset-0 bg-black/40 backdrop-blur-[7px]' />

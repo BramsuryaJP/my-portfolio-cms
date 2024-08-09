@@ -28,7 +28,7 @@ export const Sidebar = ({ children }: SidebarProps) => {
 				/>
 				<div className='drawer-content flex flex-col overflow-y-auto'>
 					{/* Navbar */}
-					<div className='navbar bg-primaryLightBg border-b dark:bg-primaryDark border-primaryLightBorder dark:border-primaryDarkBorder w-full fixed top-0 right-0 py-1 px-4 z-20 lg:z-40'>
+					<div className='navbar bg-primaryLightBg border-b dark:bg-primaryDark border-primaryLightBorder dark:border-primaryDarkBorder w-full fixed top-0 right-0 py-1 px-4 z-10 lg:z-30'>
 						<div className='flex-none lg:hidden'>
 							<label
 								htmlFor='my-drawer-3'
@@ -59,7 +59,7 @@ export const Sidebar = ({ children }: SidebarProps) => {
 						{children}
 					</div>
 				</div>
-				<div className='drawer-side z-30'>
+				<div className='drawer-side z-20'>
 					<label
 						htmlFor='my-drawer-3'
 						aria-label='close sidebar'

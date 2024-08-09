@@ -1,4 +1,4 @@
-export type CreateSkillsModalProps = {
+export type CreateModalProps = {
 	isOpen: boolean
 	setIsOpen: (value: boolean) => void
 	refetch: () => void
@@ -18,4 +18,15 @@ export type DeleteConfirmationModalProps = {
 	title: string
 	description: string
 	deleteFn: () => void
+}
+
+export type UpdateProjectsModalProps = {
+	isOpen: boolean
+	setIsOpen: (isOpen: boolean) => void
+	refetch: () => void
+	projectId: number
+	projectName: string
+	projectDescription: string
+	projectTags: string[]
+	projectImage: string
 }

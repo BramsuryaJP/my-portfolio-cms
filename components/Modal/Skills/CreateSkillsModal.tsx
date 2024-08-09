@@ -4,7 +4,7 @@ import {
 	DialogPanel,
 	DialogTitle,
 } from '@headlessui/react'
-import { CreateSkillsModalProps } from '../types'
+import { CreateModalProps } from '../types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -25,7 +25,7 @@ export default function CreateSkillsModal({
 	isOpen,
 	setIsOpen,
 	refetch,
-}: CreateSkillsModalProps) {
+}: CreateModalProps) {
 	const [loading, setLoading] = useState(false)
 
 	const {
@@ -68,7 +68,7 @@ export default function CreateSkillsModal({
 			<Dialog
 				open={isOpen}
 				as='div'
-				className='relative z-10 focus:outline-none'
+				className='relative z-40 focus:outline-none'
 				onClose={() => {}}
 			>
 				<DialogBackdrop className='fixed inset-0 bg-black/40 backdrop-blur-[7px]' />

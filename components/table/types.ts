@@ -12,6 +12,9 @@ export type TableProps<T extends { id: number; name: string }> = {
 	modal?: React.ReactElement
 	setItemId?: (value: number) => void
 	setItemName?: (value: string) => void
+	setItemDescription?: (value: string) => void
+	setItemTags?: (value: string[]) => void
+	setItemImage?: (value: string) => void
 	selectedItemId?: number[]
 	setSelectedItemId?: (value: number[]) => void
 	setDeleteType?: (value: 'single' | 'multiple') => void
@@ -26,4 +29,5 @@ export type TableProps<T extends { id: number; name: string }> = {
 	setTableLayout?: (value: boolean) => void
 	gridLayout?: boolean
 	setGridLayout?: (value: boolean) => void
+	gridComponent?: React.ReactElement
 }
