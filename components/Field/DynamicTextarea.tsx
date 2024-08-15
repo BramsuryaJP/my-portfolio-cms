@@ -1,16 +1,19 @@
 import React, { useRef, useEffect, ChangeEvent } from 'react'
+import { UseFormRegisterReturn } from 'react-hook-form'
 
 interface DynamicTextareaProps {
-	value: string
-	onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void
+	value?: string
+	onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void
 	error?: string
+	register?: UseFormRegisterReturn
 	[key: string]: any // For any additional props
 }
 
 export const DynamicTextarea: React.FC<DynamicTextareaProps> = ({
-	value,
-	onChange,
+	value: propValue,
+	onChange: propOnChange,
 	error,
+	register,
 	...props
 }) => {
 	const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -25,17 +28,24 @@ export const DynamicTextarea: React.FC<DynamicTextareaProps> = ({
 
 	useEffect(() => {
 		adjustHeight()
-	}, [value])
+	}, [propValue])
 
 	const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-		onChange(e)
+		if (propOnChange) propOnChange(e)
+		if (register?.onChange) register.onChange(e)
 		adjustHeight()
 	}
 
+	// Determine which props to spread
+	const textareaProps = register ? { ...register, ...props } : props
+
+	// Use ref from register if available, otherwise use local ref
+	const refToUse = register?.ref || textareaRef
+
 	return (
 		<textarea
-			ref={textareaRef}
-			value={value}
+			ref={refToUse}
+			value={propValue}
 			onChange={handleChange}
 			className={`
         mt-3 block w-full rounded-lg border-2 bg-primaryLight dark:bg-white/5 py-3 ps-3 pe-11 text-sm/6 text-primaryDark dark:text-white
@@ -46,7 +56,7 @@ export const DynamicTextarea: React.FC<DynamicTextareaProps> = ({
 		}
       `}
 			style={{ minHeight: '6rem', resize: 'none', overflow: 'hidden' }}
-			{...props}
+			{...textareaProps}
 		/>
 	)
 }

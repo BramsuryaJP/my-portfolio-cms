@@ -13,7 +13,8 @@ export function Table<
 	T extends {
 		id: number
 		name: string
-		description: string
+		descriptionEn: string
+		descriptionIna: string
 		tags: string[]
 		image: string
 	}
@@ -28,7 +29,8 @@ export function Table<
 	setDeleteConfirmationModalOpen,
 	setItemId,
 	setItemName,
-	setItemDescription,
+	setItemEnglishDescription,
+	setItemIndonesianDescription,
 	setItemTags,
 	setItemImage,
 	selectedItemId,
@@ -242,6 +244,17 @@ export function Table<
 																	key={
 																		cellIndex
 																	}
+																	className={`${
+																		header &&
+																		header.key ===
+																			'name' &&
+																		'whitespace-nowrap'
+																	} ${
+																		header &&
+																		header.key ===
+																			'tags' &&
+																		'w-44'
+																	}`}
 																>
 																	{header.key ===
 																	'action' ? (
@@ -261,9 +274,13 @@ export function Table<
 																						setItemName(
 																							data.name
 																						)
-																					setItemDescription &&
-																						setItemDescription(
-																							data.description
+																					setItemEnglishDescription &&
+																						setItemEnglishDescription(
+																							data.descriptionEn
+																						)
+																					setItemIndonesianDescription &&
+																						setItemIndonesianDescription(
+																							data.descriptionIna
 																						)
 																					setItemTags &&
 																						setItemTags(

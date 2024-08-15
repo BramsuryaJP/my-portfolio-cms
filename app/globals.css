@@ -7,7 +7,11 @@
 		@apply bg-primaryLightBg dark:bg-primaryDarkBg;
 	}
 
-  .google-visualization-tooltip {
-    @apply bg-primaryDarkBg dark:bg-primaryLightBg;
-  }
+	.google-visualization-tooltip {
+		@apply bg-primaryDarkBg dark:bg-primaryLightBg;
+	}
+}
+
+.ProseMirror {
+	@apply outline-none;
 }

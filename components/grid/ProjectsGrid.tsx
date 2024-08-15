@@ -7,13 +7,15 @@ export function ProjectsGrid<
 		id: number
 		name: string
 		image: string
-		description: string
+		descriptionEn: string
+		descriptionIna: string
 		tags: string[]
 	}
 >({
 	datas,
 	setItemId,
-	setItemDescription,
+	setItemEnglishDescription,
+	setItemIndonesianDescription,
 	setItemName,
 	setItemTags,
 	setItemImage,
@@ -58,8 +60,14 @@ export function ProjectsGrid<
 											setUpdateModalOpen(true)
 										setItemId && setItemId(data.id)
 										setItemName && setItemName(data.name)
-										setItemDescription &&
-											setItemDescription(data.description)
+										setItemEnglishDescription &&
+											setItemEnglishDescription(
+												data.descriptionEn
+											)
+										setItemIndonesianDescription &&
+											setItemIndonesianDescription(
+												data.descriptionIna
+											)
 										setItemTags && setItemTags(data.tags)
 										setItemImage && setItemImage(data.image)
 									}}
@@ -81,7 +89,7 @@ export function ProjectsGrid<
 						</div>
 						<div>
 							<p className='text-primaryDark dark:text-white text-sm mt-2'>
-								{data.description}
+								{data.descriptionEn}
 							</p>
 						</div>
 						<div className='flex flex-wrap gap-2 mt-4'>

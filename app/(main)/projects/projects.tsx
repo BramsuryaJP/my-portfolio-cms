@@ -35,7 +35,10 @@ export default function Projects() {
 	// projects state
 	const [projectId, setProjectId] = useState(0)
 	const [projectName, setProjectName] = useState('')
-	const [projectDescription, setProjectDescription] = useState('')
+	const [projectEnglishDescription, setProjectEnglishDescription] =
+		useState('')
+	const [projectIndonesianDescription, setProjectIndonesianDescription] =
+		useState('')
 	const [projectTags, setProjectTags] = useState<string[]>([])
 	const [projectImage, setProjectImage] = useState('')
 	const [selectedProjectId, setSelectedProjectId] = useState<number[]>([])
@@ -148,7 +151,8 @@ export default function Projects() {
 					name: string
 					tags: string[]
 					image: string
-					description: string
+					descriptionEn: string
+					descriptionIna: string
 				}>
 					title={tableLayout ? 'Projects Table' : 'Projects Grid'}
 					headers={ProjectsTableHeader}
@@ -171,7 +175,8 @@ export default function Projects() {
 							id: number
 							name: string
 							tags: string[]
-							description: string
+							descriptionEn: string
+							descriptionIna: string
 							image: string
 						}>
 							datas={allProjectsData?.data}
@@ -181,7 +186,12 @@ export default function Projects() {
 							}
 							setItemId={setProjectId}
 							setItemName={setProjectName}
-							setItemDescription={setProjectDescription}
+							setItemEnglishDescription={
+								setProjectEnglishDescription
+							}
+							setItemIndonesianDescription={
+								setProjectIndonesianDescription
+							}
 							setItemTags={setProjectTags}
 							setItemImage={setProjectImage}
 							setSelectedItemId={setSelectedProjectId}
@@ -195,7 +205,10 @@ export default function Projects() {
 					}
 					setItemId={setProjectId}
 					setItemName={setProjectName}
-					setItemDescription={setProjectDescription}
+					setItemEnglishDescription={setProjectEnglishDescription}
+					setItemIndonesianDescription={
+						setProjectIndonesianDescription
+					}
 					setItemTags={setProjectTags}
 					setItemImage={setProjectImage}
 					selectedItemId={selectedProjectId}
@@ -214,7 +227,12 @@ export default function Projects() {
 								refetch={refetchProjectsData}
 								projectId={projectId}
 								projectName={projectName}
-								projectDescription={projectDescription}
+								projectEnglishDescription={
+									projectEnglishDescription
+								}
+								projectIndonesianDescription={
+									projectIndonesianDescription
+								}
 								projectTags={projectTags}
 								projectImage={projectImage}
 							/>

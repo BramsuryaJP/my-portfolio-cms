@@ -141,7 +141,8 @@ export default function Skills() {
 					name: string
 					tags: string[]
 					image: string
-					description: string
+					descriptionEn: string
+					descriptionIna: string
 				}>
 					title='Skills Table'
 					headers={SkillsTableHeader}

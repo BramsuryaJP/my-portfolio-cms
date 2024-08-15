@@ -23,7 +23,8 @@ export default function UpdateProjectsModal({
 	refetch,
 	projectId,
 	projectName,
-	projectDescription,
+	projectEnglishDescription,
+	projectIndonesianDescription,
 	projectTags,
 	projectImage,
 }: UpdateProjectsModalProps) {
@@ -34,7 +35,12 @@ export default function UpdateProjectsModal({
 	const fileInputRef = useRef<HTMLInputElement | null>(null)
 
 	const [name, setName] = useState(projectName)
-	const [description, setDescription] = useState(projectDescription)
+	const [englishDescription, setEnglishDescription] = useState(
+		projectEnglishDescription
+	)
+	const [indonesianDescription, setIndonesianDescription] = useState(
+		projectIndonesianDescription
+	)
 	const [tags, setTags] = useState<string[]>(projectTags)
 	const [image, setImage] = useState<File | null>(null)
 
@@ -45,19 +51,32 @@ export default function UpdateProjectsModal({
 
 	useEffect(() => {
 		setName(projectName)
-		setDescription(projectDescription)
+		setEnglishDescription(projectEnglishDescription)
+		setIndonesianDescription(projectIndonesianDescription)
 		setTags(projectTags)
 		setImagePreview(process.env.NEXT_PUBLIC_BACKEND_URL + projectImage)
-	}, [projectName, projectDescription, projectTags, projectImage])
+	}, [
+		projectName,
+		projectEnglishDescription,
+		projectIndonesianDescription,
+		projectTags,
+		projectImage,
+	])
 
 	const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setName(e.target.value)
 	}
 
-	const handleDescriptionChange = (
+	const handleEnglishDescriptionChange = (
 		e: React.ChangeEvent<HTMLTextAreaElement>
 	) => {
-		setDescription(e.target.value)
+		setEnglishDescription(e.target.value)
+	}
+
+	const handleIndonesianDescriptionChange = (
+		e: React.ChangeEvent<HTMLTextAreaElement>
+	) => {
+		setIndonesianDescription(e.target.value)
 	}
 
 	const handleTagChange = (index: number, value: string) => {
@@ -92,7 +111,8 @@ export default function UpdateProjectsModal({
 
 	const resetForm = () => {
 		setName(projectName)
-		setDescription(projectDescription)
+		setEnglishDescription(projectEnglishDescription)
+		setIndonesianDescription(projectIndonesianDescription)
 		setTags(projectTags)
 		setImage(null)
 		setImagePreview(process.env.NEXT_PUBLIC_BACKEND_URL + projectImage)
@@ -115,7 +135,8 @@ export default function UpdateProjectsModal({
 			showToast('success', res.message)
 			setIsOpen(false)
 			setName(res.project.name)
-			setDescription(res.project.description)
+			setEnglishDescription(res.project.descriptionEn)
+			setIndonesianDescription(res.project.descriptionIna)
 			setTags(res.project.tags)
 			setImagePreview(
 				process.env.NEXT_PUBLIC_BACKEND_URL + res.project.image
@@ -148,8 +169,13 @@ export default function UpdateProjectsModal({
 			hasError = true
 		}
 
-		if (description.trim() === '') {
-			setDescriptionError('Project description is required')
+		if (englishDescription.trim() === '') {
+			setDescriptionError('English Project description is required')
+			hasError = true
+		}
+
+		if (indonesianDescription.trim() === '') {
+			setDescriptionError('Indonesian Project description is required')
 			hasError = true
 		}
 
@@ -164,7 +190,8 @@ export default function UpdateProjectsModal({
 
 		const formData = new FormData()
 		formData.append('name', name)
-		formData.append('description', description)
+		formData.append('descriptionIna', indonesianDescription)
+		formData.append('descriptionEn', englishDescription)
 
 		const filteredTags = tags.filter((tag) => tag.trim() !== '')
 		filteredTags.forEach((tag) => {
@@ -229,11 +256,31 @@ export default function UpdateProjectsModal({
 
 								<div>
 									<label className='text-sm/6 font-medium text-primaryDark dark:text-white'>
-										Project Description
+										English Project Description
 									</label>
 									<DynamicTextarea
-										value={description}
-										onChange={handleDescriptionChange}
+										value={englishDescription}
+										onChange={
+											handleEnglishDescriptionChange
+										}
+										error={descriptionError}
+									/>
+									{descriptionError && (
+										<p className='mt-1 text-red-500 text-xs'>
+											{descriptionError}
+										</p>
+									)}
+								</div>
+
+								<div>
+									<label className='text-sm/6 font-medium text-primaryDark dark:text-white'>
+										Indonesian Project Description
+									</label>
+									<DynamicTextarea
+										value={indonesianDescription}
+										onChange={
+											handleIndonesianDescriptionChange
+										}
 										error={descriptionError}
 									/>
 									{descriptionError && (

@@ -26,7 +26,8 @@ export type UpdateProjectsModalProps = {
 	refetch: () => void
 	projectId: number
 	projectName: string
-	projectDescription: string
+	projectEnglishDescription: string
+  projectIndonesianDescription: string
 	projectTags: string[]
 	projectImage: string
 }

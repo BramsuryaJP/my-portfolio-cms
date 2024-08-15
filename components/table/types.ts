@@ -12,7 +12,8 @@ export type TableProps<T extends { id: number; name: string }> = {
 	modal?: React.ReactElement
 	setItemId?: (value: number) => void
 	setItemName?: (value: string) => void
-	setItemDescription?: (value: string) => void
+	setItemEnglishDescription?: (value: string) => void
+	setItemIndonesianDescription?: (value: string) => void
 	setItemTags?: (value: string[]) => void
 	setItemImage?: (value: string) => void
 	selectedItemId?: number[]
