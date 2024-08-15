@@ -28,12 +28,15 @@ export default function CreateProjectsModal({
 
 	// New state variables for each field
 	const [name, setName] = useState('')
-	const [description, setDescription] = useState('')
+	const [englishDescription, setEnglishDescription] = useState('')
+	const [indonesianDescription, setIndonesianDescription] = useState('')
 	const [tags, setTags] = useState<string[]>([''])
 	const [image, setImage] = useState<File | null>(null)
 
 	const [nameError, setNameError] = useState('')
-	const [descriptionError, setDescriptionError] = useState('')
+	const [englishDescriptionError, setEnglishDescriptionError] = useState('')
+	const [indonesianDescriptionError, setIndonesianDescriptionError] =
+		useState('')
 	const [tagsError, setTagsError] = useState('')
 	const [imageError, setImageError] = useState('')
 
@@ -41,10 +44,16 @@ export default function CreateProjectsModal({
 		setName(e.target.value)
 	}
 
-	const handleDescriptionChange = (
+	const handleEnglishDescriptionChange = (
 		e: React.ChangeEvent<HTMLTextAreaElement>
 	) => {
-		setDescription(e.target.value)
+		setEnglishDescription(e.target.value)
+	}
+
+	const handleIndonesianDescriptionChange = (
+		e: React.ChangeEvent<HTMLTextAreaElement>
+	) => {
+		setIndonesianDescription(e.target.value)
 	}
 
 	const handleTagChange = (index: number, value: string) => {
@@ -79,12 +88,14 @@ export default function CreateProjectsModal({
 
 	const resetForm = () => {
 		setName('')
-		setDescription('')
+		setEnglishDescription('')
+		setIndonesianDescription('')
 		setTags([''])
 		setImage(null)
 		setImagePreview(null)
 		setNameError('')
-		setDescriptionError('')
+		setEnglishDescriptionError('')
+		setIndonesianDescriptionError('')
 		setTagsError('')
 		setImageError('')
 		if (fileInputRef.current) {
@@ -119,7 +130,8 @@ export default function CreateProjectsModal({
 
 		// Reset error messages
 		setNameError('')
-		setDescriptionError('')
+		setEnglishDescriptionError('')
+		setIndonesianDescriptionError('')
 		setTagsError('')
 		setImageError('')
 
@@ -130,8 +142,17 @@ export default function CreateProjectsModal({
 			hasError = true
 		}
 
-		if (description.trim() === '') {
-			setDescriptionError('Project description is required')
+		if (englishDescription.trim() === '') {
+			setEnglishDescriptionError(
+				'English Project description is required'
+			)
+			hasError = true
+		}
+
+		if (indonesianDescription.trim() === '') {
+			setIndonesianDescriptionError(
+				'Indonesian Project description is required'
+			)
 			hasError = true
 		}
 
@@ -151,7 +172,8 @@ export default function CreateProjectsModal({
 
 		const formData = new FormData()
 		formData.append('name', name)
-		formData.append('description', description)
+		formData.append('descriptionIna', indonesianDescription)
+		formData.append('descriptionEn', englishDescription)
 
 		const filteredTags = tags.filter((tag) => tag.trim() !== '')
 		filteredTags.forEach((tag) => {
@@ -216,16 +238,36 @@ export default function CreateProjectsModal({
 
 								<div>
 									<label className='text-sm/6 font-medium text-primaryDark dark:text-white'>
-										Project Description
+										English Project Description
 									</label>
 									<DynamicTextarea
-										value={description}
-										onChange={handleDescriptionChange}
-										error={descriptionError}
+										value={englishDescription}
+										onChange={
+											handleEnglishDescriptionChange
+										}
+										error={englishDescriptionError}
 									/>
-									{descriptionError && (
+									{englishDescriptionError && (
 										<p className='mt-1 text-red-500 text-xs'>
-											{descriptionError}
+											{englishDescriptionError}
+										</p>
+									)}
+								</div>
+
+								<div>
+									<label className='text-sm/6 font-medium text-primaryDark dark:text-white'>
+										Indonesian Project Description
+									</label>
+									<DynamicTextarea
+										value={indonesianDescription}
+										onChange={
+											handleIndonesianDescriptionChange
+										}
+										error={indonesianDescriptionError}
+									/>
+									{indonesianDescriptionError && (
+										<p className='mt-1 text-red-500 text-xs'>
+											{indonesianDescriptionError}
 										</p>
 									)}
 								</div>
