@@ -45,7 +45,9 @@ export default function UpdateProjectsModal({
 	const [image, setImage] = useState<File | null>(null)
 
 	const [nameError, setNameError] = useState('')
-	const [descriptionError, setDescriptionError] = useState('')
+	const [englishDescriptionError, setEnglishDescriptionError] = useState('')
+	const [indonesianDescriptionError, setIndonesianDescriptionError] =
+		useState('')
 	const [tagsError, setTagsError] = useState('')
 	const [imageError, setImageError] = useState('')
 
@@ -117,7 +119,8 @@ export default function UpdateProjectsModal({
 		setImage(null)
 		setImagePreview(process.env.NEXT_PUBLIC_BACKEND_URL + projectImage)
 		setNameError('')
-		setDescriptionError('')
+		setEnglishDescriptionError('')
+		setIndonesianDescriptionError('')
 		setTagsError('')
 		setImageError('')
 		if (fileInputRef.current) {
@@ -158,7 +161,8 @@ export default function UpdateProjectsModal({
 		e.preventDefault()
 
 		setNameError('')
-		setDescriptionError('')
+		setEnglishDescriptionError('')
+		setIndonesianDescriptionError('')
 		setTagsError('')
 		setImageError('')
 
@@ -170,12 +174,16 @@ export default function UpdateProjectsModal({
 		}
 
 		if (englishDescription.trim() === '') {
-			setDescriptionError('English Project description is required')
+			setEnglishDescriptionError(
+				'English Project description is required'
+			)
 			hasError = true
 		}
 
 		if (indonesianDescription.trim() === '') {
-			setDescriptionError('Indonesian Project description is required')
+			setIndonesianDescriptionError(
+				'Indonesian Project description is required'
+			)
 			hasError = true
 		}
 
@@ -263,11 +271,11 @@ export default function UpdateProjectsModal({
 										onChange={
 											handleEnglishDescriptionChange
 										}
-										error={descriptionError}
+										error={englishDescriptionError}
 									/>
-									{descriptionError && (
+									{englishDescriptionError && (
 										<p className='mt-1 text-red-500 text-xs'>
-											{descriptionError}
+											{englishDescriptionError}
 										</p>
 									)}
 								</div>
@@ -281,11 +289,11 @@ export default function UpdateProjectsModal({
 										onChange={
 											handleIndonesianDescriptionChange
 										}
-										error={descriptionError}
+										error={indonesianDescriptionError}
 									/>
-									{descriptionError && (
+									{indonesianDescriptionError && (
 										<p className='mt-1 text-red-500 text-xs'>
-											{descriptionError}
+											{indonesianDescriptionError}
 										</p>
 									)}
 								</div>
